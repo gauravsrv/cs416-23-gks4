@@ -28,4 +28,9 @@ button {
 /* Show only the first slide by default */
 #slides > div#slide1 {
     display: block;
+
+/* Style for selected page button */
+.pageBtn.selected {
+    background-color: #333;
+    color: #fff;
 }

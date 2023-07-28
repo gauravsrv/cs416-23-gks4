@@ -16,12 +16,20 @@ document.addEventListener("DOMContentLoaded", function () {
         slides.filter(`#slide${slideIndex}`).style("display", "block");
     }
 
+
+    function setSelectedButton(pageIndex) {
+        pageButtons.classed("selected", false);
+        pageButtons.filter(`#page${pageIndex}`).classed("selected", true);
+    }
+
     pageButtons.on("click", function () {
         const pageId = d3.select(this).attr("id");
         const slideIndex = parseInt(pageId.slice(-1));
         showSlide(slideIndex);
+        setSelectedButton(slideIndex);
     });
 
     // Show the first slide by default
     showSlide(1);
+    setSelectedButton(1);
 });
