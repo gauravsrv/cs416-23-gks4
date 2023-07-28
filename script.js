@@ -28,7 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
             d.Overall_Rating = +d.Overall_Rating;
         });
 
-        const nestedData = d3.group(data, d => d.Review_Date.substring(0, 4));
+        const filteredData = data.filter(d => d.Review_Date && d.Review_Date.length >= 4);
+
+        const nestedData = d3.group(filteredData, d => d.Review_Date.substring(0, 4));
+
 
         const margin = { top: 20, right: 30, bottom: 60, left: 100 };
         const width = 800 - margin.left - margin.right;
