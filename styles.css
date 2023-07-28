@@ -19,3 +19,13 @@ button {
     border: none;
     cursor: pointer;
 }
+
+/* Hide slide divs by default */
+#slides > div {
+    display: none;
+}
+
+/* Show only the first slide by default */
+#slides > div#slide1 {
+    display: block;
+}
