@@ -1,8 +1,5 @@
 // JavaScript code
 document.addEventListener("DOMContentLoaded", function () {
-    const mainText = document.getElementById("mainText");
-    
-
     // D3.js code
     const slides = d3.selectAll("#slides > div");
     const pageButtons = d3.selectAll(".pageBtn");
@@ -11,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
         slides.style("display", "none");
         slides.filter(`#slide${slideIndex}`).style("display", "block");
     }
-
 
     function setSelectedButton(pageIndex) {
         pageButtons.classed("selected", false);
@@ -25,16 +21,14 @@ document.addEventListener("DOMContentLoaded", function () {
         setSelectedButton(slideIndex);
     });
 
-
     // Slide 1: Top 10 Airlines for each year between 2015 to 2019
     d3.csv("Airline_review.csv").then(data => {
-        const nestedData = d3.nest()
-            .key(d => d.Review_Date.substring(0, 4)) // Extract year from Review Date
-            .rollup(values => {
-                const top10Airlines = values.sort((a, b) => d3.descending(+a.Overall_Rating, +b.Overall_Rating)).slice(0, 10);
-                return top10Airlines;
-            })
-            .entries(data);
+        // Convert Overall_Rating to a number for sorting
+        data.forEach(d => {
+            d.Overall_Rating = +d.Overall_Rating;
+        });
+
+        const nestedData = d3.group(data, d => d.Review_Date.substring(0, 4));
 
         const margin = { top: 20, right: 30, bottom: 60, left: 100 };
         const width = 800 - margin.left - margin.right;
@@ -48,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
         const xScale = d3.scaleBand()
-            .domain(nestedData[0].value.map(d => d.Airline_Name))
+            .domain(nestedData.get("2015").map(d => d.Airline_Name))
             .range([0, width])
             .padding(0.2);
 
@@ -75,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Create bars
         const bars = svg.selectAll(".bar")
-            .data(nestedData[0].value)
+            .data(nestedData.get("2015"))
             .enter()
             .append("rect")
             .attr("class", "bar")
@@ -85,7 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("height", d => height - yScale(d.Overall_Rating))
             .attr("fill", "#007BFF");
     });
-    // Show the first slide by default
+
+    // Show the first slide and select the first button by default
     showSlide(1);
     setSelectedButton(1);
 });
