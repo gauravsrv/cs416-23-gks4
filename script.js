@@ -1,11 +1,7 @@
 // JavaScript code
 document.addEventListener("DOMContentLoaded", function () {
     const mainText = document.getElementById("mainText");
-    const changeTextBtn = document.getElementById("changeTextBtn");
-
-    changeTextBtn.addEventListener("click", function () {
-        mainText.textContent = "Text changed!";
-    });
+    
 
     // D3.js code
     const slides = d3.selectAll("#slides > div");
