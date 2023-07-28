@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3.js GitHub Webpage</title>
+    <title>D3.js GitHub Webpage with Slides</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1 id="mainText">Hello, GitHub!</h1>
+        <h1 id="mainText">Narrative visualization</h1>
         <button id="changeTextBtn">Change Text</button>
-        <div id="chart"></div>
+        <div id="slides">
+            <div id="slide1">Scene 1</div>
+            <div id="slide2">Scene 2</div>
+            <div id="slide3">Scene 3</div>
+        </div>
+        <div class="pagination">
+            <button class="pageBtn" id="page1">1</button>
+            <button class="pageBtn" id="page2">2</button>
+            <button class="pageBtn" id="page3">3</button>
+        </div>
     </div>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="script.js"></script>

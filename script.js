@@ -8,20 +8,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // D3.js code
-    const data = [10, 30, 15, 25, 20];
+    const slides = d3.selectAll("#slides > div");
+    const pageButtons = d3.selectAll(".pageBtn");
 
-    const svg = d3.select("#chart")
-                .append("svg")
-                .attr("width", 400)
-                .attr("height", 200);
+    function showSlide(slideIndex) {
+        slides.style("display", "none");
+        slides.filter(`#slide${slideIndex}`).style("display", "block");
+    }
 
-    const bars = svg.selectAll("rect")
-                .data(data)
-                .enter()
-                .append("rect")
-                .attr("x", (d, i) => i * 80)
-                .attr("y", (d) => 200 - d)
-                .attr("width", 50)
-                .attr("height", (d) => d)
-                .attr("fill", "#007BFF");
+    pageButtons.on("click", function () {
+        const pageId = d3.select(this).attr("id");
+        const slideIndex = parseInt(pageId.slice(-1));
+        showSlide(slideIndex);
+    });
+
+    // Show the first slide by default
+    showSlide(1);
 });
