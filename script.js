@@ -336,15 +336,14 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0.7)
             .on("mouseenter", function (event, d) {
             // Show tooltip on mouseover
-            const [mouseX, mouseY] = d3.pointer(event, scatterSvg.node());
-            const containerRect = scatterSvg.node().getBoundingClientRect();
+            const [mouseX, mouseY] = d3.pointer(event, this);
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0.9);
 
             tooltip.style("opacity", 0.9)
-                .style("left", `${containerRect.left + mouseX}px`)
-                .style("top", `${containerRect.top + mouseY - 28}px`)
+                .style("left", `${mouseX}px`)
+                .style("top", `${mouseY - 28}px`)
                 .html(`
                     <div><strong>${d.Airline}</strong></div>
                     <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
