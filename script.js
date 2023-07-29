@@ -41,6 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 }));
         });
 
+        const airlines = data.map((d) => d["Airline Name"]).filter((value, index, self) => self.indexOf(value) === index);
+
+        const colorScale = d3.scaleOrdinal()
+            .domain(airlines)
+            .range(d3.schemeCategory10); // Using D3's built-in color scheme
+
         const margin = { top: 20, right: 20, bottom: 50, left: 80 };
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
@@ -78,11 +84,11 @@ document.addEventListener("DOMContentLoaded", function () {
             .data((d) => airlinesByYear[d])
             .enter()
             .append("rect")
-            .attr("x", 0)
+            .attr("x", (d) => xScale.bandwidth() / 4) // Centering the bars around the tick marks
             .attr("y", (d) => yScale(d.Rating))
-            .attr("width", xScale.bandwidth())
+            .attr("width", xScale.bandwidth() / 2)
             .attr("height", (d) => height - yScale(d.Rating))
-            .attr("fill", "#007BFF");
+            .attr("fill", (d) => colorScale(d.Airline));
 
         barGroup.selectAll("text")
             .data((d) => airlinesByYear[d])
@@ -93,5 +99,16 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("text-anchor", "middle")
             .text((d) => d.Rating.toFixed(1))
             .attr("fill", "#fff");
+
+        barGroup.selectAll(".airlineLabel")
+            .data((d) => airlinesByYear[d])
+            .enter()
+            .append("text")
+            .attr("class", "airlineLabel")
+            .attr("x", xScale.bandwidth() / 2)
+            .attr("y", height + 18)
+            .attr("text-anchor", "middle")
+            .text((d) => d.Airline)
+            .attr("fill", (d) => colorScale(d.Airline));
     });
 });
