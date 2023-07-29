@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1500); // Change the duration as needed for the animation speed
 
         // Stop the animation when the user clicks on the chart
-        //svg.on("click", () => animationInterval.stop());
+        svg.on("click", () => animationInterval.stop());
 
         // Get the mouse position on the SVG container
         svg.on("mousemove", function () {
