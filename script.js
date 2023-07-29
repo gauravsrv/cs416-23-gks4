@@ -224,6 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
       function stopAnimation() {
         animationInterval.stop();
         isAnimationStopped = true;
+        updateGraph(airlinesData);
     }
 
         let yearIndex = 0;
