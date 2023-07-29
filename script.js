@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("r", 8)
             .attr("fill", (d) => colorScale(d.Airline))
             .style("opacity", 0.7)
-            .on("mouseover", function (event, d) {
+            .on("mouseenter", function (event, d) {
             // Show tooltip on mouseover
             const [mouseX, mouseY] = d3.pointer(event, this);
             tooltip.transition()
