@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         let yearIndex = 0;
-        updateGraph(yearIndex);
+         updateGraph(yearIndex, 0, 0); 
 
         const animationInterval = d3.interval(() => {
             yearIndex = (yearIndex + 1) % years.length;
@@ -164,5 +164,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Stop the animation when the user clicks on the chart
         svg.on("click", () => animationInterval.stop());
+
+        // Get the mouse position on the SVG container
+        svg.on("mousemove", function () {
+            const [mouseX, mouseY] = d3.mouse(this);
+            updateGraph(yearIndex, mouseX, mouseY);
+        });
     });
 });
