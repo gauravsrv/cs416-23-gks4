@@ -285,9 +285,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const airlinesComfortData = airlinesToPlot.map((airline) => {
             const comfortData = data.filter((d) => d["Airline Name"] === airline);
+            const overallRating = d3.mean(comfortData, (d) => parseFloat(d["Overall_Rating"])) || 0;
+            const comfortLevel = d3.mean(comfortData, (d) => parseFloat(d["Seat Comfort"])) || 0;
             return {
                 Airline: airline,
-                ComfortLevel: d3.mean(comfortData, (d) => parseFloat(d["Seat Comfort"])) || 0,
+                OverallRating: overallRating,
+                ComfortLevel: comfortLevel,
             };
         });
 
@@ -333,15 +336,19 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0.7)
             .on("mouseover", function (event, d) {
             // Show tooltip on mouseover
+            const [mouseX, mouseY] = d3.pointer(event, this);
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0.9);
 
-            tooltip.html(`
-                <div><strong>${d.Airline}</strong></div>
-                <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
-                <div>Latest Comfort Rating: ${d3.format(".2f")(d.ComfortLevel)}</div>
-            `)
+            tooltip.style("opacity", 0.9)
+                .style("left", `${mouseX}px`)
+                .style("top", `${mouseY - 28}px`)
+                .html(`
+                    <div><strong>${d.Airline}</strong></div>
+                    <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
+                    <div>Comfort Rating: ${d3.format(".2f")(d.ComfortLevel)}</div>
+                `)
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
             })
