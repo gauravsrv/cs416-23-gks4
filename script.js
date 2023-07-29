@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .range(d3.schemeCategory10); // Using D3's built-in color scheme
 
          const legendWidth = 120;   
-        const margin = { top: 40, right: legendWidth, bottom: 50, left: 80 }; // Increased left margin to accommodate the description
+        const margin = { top: 40, right: legendWidth, bottom: 50, left: 60 }; // Increased left margin to accommodate the description
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
         let mouseX = 0;
@@ -134,16 +134,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const legend = svg.append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(650, 40)`); // Move the legend to the right side
+            .attr("transform", `translate(640, 30)`); // Move the legend to the right side
 
 
-        const legendItems = legend.selectAll(".legendItem")
+         const legendItems = legend.selectAll(".legendItem")
         .data(airlinesToPlot)
         .enter()
         .append("g")
         .attr("class", "legendItem")
         .attr("transform", (d, i) => `translate(0, ${i * 20})`)
         .on("click", function (event, d) {
+            if (!isAnimationStopped) {
+                stopAnimation();
+            }
             const isActive = d3.select(this).classed("active");
             d3.selectAll(".legendItem").classed("active", false);
             d3.select(this).classed("active", !isActive);
@@ -154,7 +157,24 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 updateGraphWithAnimation(airlinesData);
             }
+        })
+        .on("mouseenter", function (event, d) {
+            if (!isAnimationStopped) {
+                stopAnimation();
+            }
+            const isActive = d3.select(this).classed("active");
+            if (!isActive) {
+                const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
+                updateGraphWithAnimation(filteredData);
+            }
+        })
+        .on("mouseleave", function () {
+            if (!isAnimationStopped) {
+                stopAnimation();
+                updateGraphWithAnimation(airlinesData);
+            }
         });
+
 
 
     
@@ -186,6 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
             path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
         }
 
+        let isAnimationStopped = false; // A flag to keep track of whether the animation has stopped or not
+
         function updateGraphWithAnimation(data) {
         const circles = svg.selectAll(".circle").data(data);
         circles.transition()
@@ -199,6 +221,11 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("d", (d) => line(d.slice(0, yearIndex + 1)));
     }
 
+      function stopAnimation() {
+        animationInterval.stop();
+        isAnimationStopped = true;
+    }
+
         let yearIndex = 0;
         updateGraph(yearIndex);
         updateGraphWithAnimation(airlinesData);
@@ -210,13 +237,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1500); // Change the duration as needed for the animation speed
 
         // Stop the animation when the user clicks on the chart
-        svg.on("click", () => animationInterval.stop());
+    svg.on("click", stopAnimation);
 
-        // Get the mouse position on the SVG container
-          svg.on("mousemove", function (event) {
+
+            // Get the mouse position on the SVG container
+        svg.on("mousemove", function (event) {
             [mouseX, mouseY] = d3.pointer(event, this);
-            updateGraph(yearIndex);
-            updateGraphWithAnimation(airlinesData);
+            if (!isAnimationStopped) {
+                updateGraph(yearIndex);
+            }
         });
     });
 });
