@@ -29,16 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
     d3.csv("Airline_review.csv").then(function (data) {
         const years = [2015, 2016, 2017, 2018, 2019];
 
-        const airlinesByYear = {};
-        years.forEach((year) => {
-            airlinesByYear[year] = data
-                .filter((d) => parseInt(d["Review_year"]) === year)
-                .map((d) => ({
-                    Airline: d["Airline Name"],
-                    Rating: parseFloat(d["Overall_Rating"]),
-                }));
-        });
-
         const airlines = data.map((d) => d["Airline Name"]).filter((value, index, self) => self.indexOf(value) === index);
 
         const colorScale = d3.scaleOrdinal()
@@ -56,10 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        const xScale = d3.scaleBand()
-            .domain(years)
-            .range([0, width])
-            .padding(0.1);
+        const xScale = d3.scaleLinear()
+            .domain([d3.min(years), d3.max(years)])
+            .range([0, width]);
 
         const yScale = d3.scaleLinear()
             .domain([0, 10]) // Assuming the rating ranges from 0 to 10
@@ -67,60 +56,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(xScale));
+            .call(d3.axisBottom(xScale).ticks(5).tickFormat(d3.format("d")));
 
         svg.append("g").call(d3.axisLeft(yScale));
 
-        const barGroup = svg.selectAll(".barGroup")
-            .data(years)
-            .enter()
-            .append("g")
-            .attr("class", "barGroup")
-            .attr("transform", (d) => `translate(${xScale(d)}, 0)`);
+        airlines.forEach((airline) => {
+            const airlineData = years.map((year) => {
+                const ratingData = data.find((d) => d["Airline Name"] === airline && parseInt(d["Review_year"]) === year);
+                return {
+                    Year: year,
+                    Rating: ratingData ? parseFloat(ratingData["Overall_Rating"]) : 0,
+                };
+            });
 
-        barGroup.selectAll("rect")
-            .data((d) => airlinesByYear[d])
-            .enter()
-            .append("rect")
-            .attr("x", (d, i) => i * (xScale.bandwidth() / 10)) // Separate bars for each airline in the group
-            .attr("y", (d) => yScale(d.Rating))
-            .attr("width", xScale.bandwidth() / 10)
-            .attr("height", (d) => height - yScale(d.Rating))
-            .attr("fill", (d) => colorScale(d.Airline));
+            const line = d3.line()
+                .x((d) => xScale(d.Year))
+                .y((d) => yScale(d.Rating));
 
-        const airlineLabels = barGroup.selectAll(".airlineLabel")
-            .data((d) => airlinesByYear[d])
-            .enter()
-            .append("text")
-            .attr("class", "airlineLabel")
-            .attr("x", (d, i) => (i * (xScale.bandwidth() / 10)) + (xScale.bandwidth() / 20))
-            .attr("y", height + 18)
-            .attr("text-anchor", "middle")
-            .text((d) => d.Airline)
-            .attr("fill", (d) => colorScale(d.Airline));
+            svg.append("path")
+                .datum(airlineData)
+                .attr("fill", "none")
+                .attr("stroke", colorScale(airline))
+                .attr("stroke-width", 2)
+                .attr("d", line);
 
-        // Adjust the airline labels' position and rotation for better readability
-        airlineLabels.attr("transform", function (d) {
-            const bbox = this.getBBox();
-            const barWidth = xScale.bandwidth() / 10;
-            const labelWidth = bbox.width;
-            const labelX = d3.select(this).attr("x");
-            const labelXLeft = parseFloat(labelX) - labelWidth / 2;
-            const labelXRight = parseFloat(labelX) + labelWidth / 2;
-            return labelXLeft < 0 ? `translate(${labelWidth / 2},0) rotate(-45)` : (labelXRight > barWidth ? `translate(-${labelWidth / 2},0) rotate(-45)` : "");
+            svg.selectAll(".dot")
+                .data(airlineData)
+                .enter()
+                .append("circle")
+                .attr("cx", (d) => xScale(d.Year))
+                .attr("cy", (d) => yScale(d.Rating))
+                .attr("r", 4)
+                .attr("fill", colorScale(airline));
         });
 
         // Create a legend
         const legend = svg.append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(0, ${height + 35})`);
+            .attr("transform", `translate(${width - 100}, 20)`);
 
         const legendItems = legend.selectAll(".legendItem")
             .data(airlines)
             .enter()
             .append("g")
             .attr("class", "legendItem")
-            .attr("transform", (d, i) => `translate(${i * 80}, 0)`);
+            .attr("transform", (d, i) => `translate(0, ${i * 20})`);
 
         legendItems.append("rect")
             .attr("x", 0)
