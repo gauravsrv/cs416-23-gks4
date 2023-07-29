@@ -141,15 +141,27 @@ document.addEventListener("DOMContentLoaded", function () {
             circle.attr("cx", (d) => xScale(d[yearIndex].Year))
                 .attr("cy", (d) => yScale(d[yearIndex].Rating));
 
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", 0)
-                .transition()
-                .duration(200)
-                .style("opacity", 0.9)
-                .style("left", `${d3.event.pageX}px`)
-                .style("top", `${d3.event.pageY - 28}px`)
-                .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+            if (d3.event) {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0)
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0.9)
+                    .style("left", `${d3.event.pageX}px`)
+                    .style("top", `${d3.event.pageY - 28}px`)
+                    .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+            } else {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0)
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0.9)
+                    .style("left", `${mouseX}px`)
+                    .style("top", `${mouseY - 28}px`)
+                    .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+            }
 
             path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
         }
