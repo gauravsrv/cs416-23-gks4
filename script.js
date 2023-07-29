@@ -33,8 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
         years.forEach((year) => {
             airlinesByYear[year] = data
                 .filter((d) => parseInt(d["Review_year"]) === year)
-                .sort((a, b) => b["Overall_Rating"] - a["Overall_Rating"])
-                .slice(0, 10)
                 .map((d) => ({
                     Airline: d["Airline Name"],
                     Rating: parseFloat(d["Overall_Rating"]),
@@ -84,31 +82,58 @@ document.addEventListener("DOMContentLoaded", function () {
             .data((d) => airlinesByYear[d])
             .enter()
             .append("rect")
-            .attr("x", (d) => xScale.bandwidth() / 4) // Centering the bars around the tick marks
+            .attr("x", (d, i) => i * (xScale.bandwidth() / 10)) // Separate bars for each airline in the group
             .attr("y", (d) => yScale(d.Rating))
-            .attr("width", xScale.bandwidth() / 2)
+            .attr("width", xScale.bandwidth() / 10)
             .attr("height", (d) => height - yScale(d.Rating))
             .attr("fill", (d) => colorScale(d.Airline));
 
-        barGroup.selectAll("text")
-            .data((d) => airlinesByYear[d])
-            .enter()
-            .append("text")
-            .attr("x", xScale.bandwidth() / 2)
-            .attr("y", (d) => yScale(d.Rating) - 5)
-            .attr("text-anchor", "middle")
-            .text((d) => d.Rating.toFixed(1))
-            .attr("fill", "#fff");
-
-        barGroup.selectAll(".airlineLabel")
+        const airlineLabels = barGroup.selectAll(".airlineLabel")
             .data((d) => airlinesByYear[d])
             .enter()
             .append("text")
             .attr("class", "airlineLabel")
-            .attr("x", xScale.bandwidth() / 2)
+            .attr("x", (d, i) => (i * (xScale.bandwidth() / 10)) + (xScale.bandwidth() / 20))
             .attr("y", height + 18)
             .attr("text-anchor", "middle")
             .text((d) => d.Airline)
             .attr("fill", (d) => colorScale(d.Airline));
+
+        // Adjust the airline labels' position and rotation for better readability
+        airlineLabels.attr("transform", function (d) {
+            const bbox = this.getBBox();
+            const barWidth = xScale.bandwidth() / 10;
+            const labelWidth = bbox.width;
+            const labelX = d3.select(this).attr("x");
+            const labelXLeft = parseFloat(labelX) - labelWidth / 2;
+            const labelXRight = parseFloat(labelX) + labelWidth / 2;
+            return labelXLeft < 0 ? `translate(${labelWidth / 2},0) rotate(-45)` : (labelXRight > barWidth ? `translate(-${labelWidth / 2},0) rotate(-45)` : "");
+        });
+
+        // Create a legend
+        const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(0, ${height + 35})`);
+
+        const legendItems = legend.selectAll(".legendItem")
+            .data(airlines)
+            .enter()
+            .append("g")
+            .attr("class", "legendItem")
+            .attr("transform", (d, i) => `translate(${i * 80}, 0)`);
+
+        legendItems.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", colorScale);
+
+        legendItems.append("text")
+            .attr("x", 20)
+            .attr("y", 10)
+            .text((d) => d)
+            .attr("fill", "#333")
+            .style("font-size", "12px");
     });
 });
