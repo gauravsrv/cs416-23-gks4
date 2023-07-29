@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Load the CSV data and create the chart in slide 1
     d3.csv("Airline_review.csv").then(function (data) {
         const airlinesToPlot = [
-            "Air India",
             "US Airways",
             "United Airlines",
             "Emirates",
@@ -39,7 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
             "Oman Air",
             "British Airways",
             "Lufthansa",
-            "KLM Royal Dutch Airlines"
+            "KLM Royal Dutch Airlines",
+            "Air India"
         ];
 
         const years = Array.from({ length: 11 }, (_, i) => 2013 + i); // From 2013 to 2023
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .range(d3.schemeCategory10); // Using D3's built-in color scheme
 
          const legendWidth = 120;   
-        const margin = { top: 40, right: legendWidth, bottom: 50, left: 200 }; // Increased left margin to accommodate the description
+        const margin = { top: 40, right: legendWidth, bottom: 50, left: 80 }; // Increased left margin to accommodate the description
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
         let mouseX = 0;
@@ -180,7 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
             tooltip.style("opacity", 0.9)
                 .style("left", `${mouseX}px`)
                 .style("top", `${mouseY - 28}px`);
-                //.html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
 
             path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
         }
