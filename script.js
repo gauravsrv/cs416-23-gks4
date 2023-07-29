@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const legend = svg.append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(${800}, 20)`); // Move the legend to the right side
+            .attr("transform", `translate(${650}, 20)`); // Move the legend to the right side
 
 
         const legendItems = legend.selectAll(".legendItem")
