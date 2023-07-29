@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("fill", (d, i) => colorScale(airlinesToPlot[i]))
             .style("opacity", 0); // Hide the circles initially
 
-        const tooltip = d3.select("#chartContainer")
+        const tooltip1 = d3.select("#chartContainer")
             .append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
             circle.attr("cx", (d) => xScale(d[yearIndex].Year))
                 .attr("cy", (d) => yScale(d[yearIndex].Rating));
 
-            tooltip.style("opacity", 0.9)
+            tooltip1.style("opacity", 0.9)
                 .style("left", `${mouseX}px`)
                 .style("top", `${mouseY - 28}px`);
 
