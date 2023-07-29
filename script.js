@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Create the scatter plot in slide 2
-        const scatterMargin = { top: 40, right: 30, bottom: 50, left: 60 };
+        const scatterMargin = { top: 40, right: 30, bottom: 50, left: 30 };
         const scatterWidth = 800 - scatterMargin.left - scatterMargin.right;
         const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
 
