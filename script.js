@@ -43,8 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "KLM Royal Dutch Airlines"
         ];
 
-        const years = [2015, 2016, 2017, 2018, 2019];
-
+        const years = Array.from({ length: 11 }, (_, i) => 2013 + i);
         const colorScale = d3.scaleOrdinal()
             .domain(airlinesToPlot)
             .range(d3.schemeCategory10); // Using D3's built-in color scheme
