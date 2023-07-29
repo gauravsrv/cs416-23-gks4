@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .text("Comfort Level");
 
         // Add legend to slide2
-        const legend2 = scatterContainer.append("g")
+        const legend2 = scatterSvg.append("g")
             .attr("class", "legend")
             .attr("transform", `translate(640, 30)`);
 
