@@ -86,3 +86,23 @@ button {
     font-size: 12px;
     fill: #555;
 }
+
+/* Tooltip CSS */
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none; /* This ensures that the tooltip doesn't interfere with mouse events */
+}
+
+/* Additional styling for the tooltip text */
+.tooltip div {
+    margin-bottom: 4px;
+}
+
+.tooltip strong {
+    font-weight: bold;
+}

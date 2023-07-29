@@ -315,6 +315,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // Use a logarithmic scale for the y-axis
         scatterSvg.append("g").call(d3.axisLeft(yScatterScale).ticks(5, ".1"));
 
+        const tooltip = d3.select("#scatterPlotContainer")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
 
         scatterSvg.selectAll(".dot")
             .data(airlinesComfortData)
@@ -325,7 +330,27 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("cy", (d) => yScatterScale(d.ComfortLevel))
             .attr("r", 8)
             .attr("fill", (d) => colorScale(d.Airline))
-            .style("opacity", 0.7);
+            .style("opacity", 0.7)
+            .on("mouseover", function (event, d) {
+            // Show tooltip on mouseover
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+
+            tooltip.html(`
+                <div><strong>${d.Airline}</strong></div>
+                <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
+                <div>Latest Comfort Rating: ${d3.format(".2f")(d.ComfortLevel)}</div>
+            `)
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function () {
+                // Hide tooltip on mouseout
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
 
         scatterSvg.append("text")
             .attr("x", scatterWidth / 2)
