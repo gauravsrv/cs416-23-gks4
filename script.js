@@ -115,13 +115,20 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0);
 
         // Add chart description
-        const description = "Top-rated Airlines for selected years (2013-2023)";
+        const description = "Top-rated Airlines for selected years (2013-2023)\n" +
+            "This chart displays the ratings of the top-rated airlines for the selected years, " +
+            "ranging from 2013 to 2023. The y-axis represents the overall rating, " +
+            "while the x-axis represents the years. Each line on the graph represents an airline, " +
+            "and the lines show how their ratings evolved over the years. " +
+            "Hover over the chart to view the ratings for each year.";
         svg.append("text")
-            .attr("x", -margin.left + 10)
-            .attr("y", -margin.top + 10)
+            .attr("x", -margin.left)
+            .attr("y", -margin.top + 15)
             .style("text-anchor", "start")
-            .style("font-size", "14px")
+            .style("font-size", "12px")
+            .style("fill", "#555")
             .text(description);
+
        
         // Add x-axis label
         svg.append("text")
@@ -142,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const legend = svg.append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(${width}, 20)`); // Move the legend to the right side
+            .attr("transform", `translate(${800}, 20)`); // Move the legend to the right side
 
 
         const legendItems = legend.selectAll(".legendItem")
