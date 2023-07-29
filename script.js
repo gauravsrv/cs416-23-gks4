@@ -115,6 +115,23 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0);
 
        
+        // Add x-axis label
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height + margin.bottom - 10)
+            .style("text-anchor", "middle")
+            .text("Year");
+
+        // Add y-axis label
+        svg.append("text")
+            .attr("x", -(height / 2))
+            .attr("y", -margin.left + 15)
+            .attr("transform", "rotate(-90)")
+            .style("text-anchor", "middle")
+            .text("Overall Rating");
+
+            
+
         const legend = svg.append("g")
             .attr("class", "legend")
             .attr("transform", `translate(${width}, 20)`); // Move the legend to the right side
@@ -159,10 +176,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const animationInterval = d3.interval(() => {
             yearIndex = (yearIndex + 1) % years.length;
             updateGraph(yearIndex);
-        }, 1500); // Change the duration as needed for the animation speed
+        }, 500); // Change the duration as needed for the animation speed
 
         // Stop the animation when the user clicks on the chart
-        svg.on("click", () => animationInterval.stop());
+        //svg.on("click", () => animationInterval.stop());
 
         // Get the mouse position on the SVG container
         svg.on("mousemove", function () {
