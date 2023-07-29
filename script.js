@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const legend = svg.append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(${width - 100}, 20)`);
+            .attr("transform", `translate(${margin.left + 10}, 20)`); // Move the legend to the left side
 
         const legendItems = legend.selectAll(".legendItem")
             .data(airlinesToPlot)
