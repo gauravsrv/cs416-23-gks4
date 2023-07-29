@@ -135,5 +135,4 @@ document.addEventListener("DOMContentLoaded", function () {
             yearIndex = (yearIndex + 1) % years.length;
             updateGraph(yearIndex);
         }, 1500); // Change the duration as needed for the animation speed
-    });
-});
+
