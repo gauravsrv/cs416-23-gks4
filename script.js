@@ -272,73 +272,105 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Create the scatter plot in slide 2
-        const marginScatter = { top: 40, right: legendWidth, bottom: 50, left: 60 };
-    const widthScatter = 800 - marginScatter.left - marginScatter.right;
-    const heightScatter = 400 - marginScatter.top - marginScatter.bottom;
+        const scatterMargin = { top: 40, right: 30, bottom: 50, left: 60 };
+        const scatterWidth = 800 - scatterMargin.left - scatterMargin.right;
+        const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
 
-    const svgScatter = d3.select("#scatterPlotContainer")
-        .append("svg")
-        .attr("width", widthScatter + marginScatter.left + marginScatter.right)
-        .attr("height", heightScatter + marginScatter.top + marginScatter.bottom)
-        .append("g")
-        .attr("transform", `translate(${marginScatter.left}, ${marginScatter.top})`);
+        const scatterSvg = d3.select("#scatterPlotContainer")
+            .append("svg")
+            .attr("width", scatterWidth + scatterMargin.left + scatterMargin.right)
+            .attr("height", scatterHeight + scatterMargin.top + scatterMargin.bottom)
+            .append("g")
+            .attr("transform", `translate(${scatterMargin.left}, ${scatterMargin.top})`);
 
-    const xScaleScatter = d3.scaleLinear()
-        .domain([0, 10]) // Assuming Seat Comfort ranges from 0 to 10
-        .range([0, widthScatter]);
+        const airlinesComfortData = airlinesToPlot.map((airline) => {
+            const comfortData = data.filter((d) => d["Airline Name"] === airline);
+            return {
+                Airline: airline,
+                ComfortLevel: d3.mean(comfortData, (d) => parseFloat(d["Seat Comfort"])) || 0,
+            };
+        });
 
-    const yScaleScatter = d3.scaleLinear()
-        .domain([0, airlinesToPlot.length])
-        .range([heightScatter, 0]);
+        const xScatterScale = d3.scaleBand()
+            .domain(airlinesComfortData.map((d) => d.Airline))
+            .range([0, scatterWidth])
+            .padding(0.2);
 
-    svgScatter.append("g")
-        .call(d3.axisBottom(xScaleScatter));
+        const yScatterScale = d3.scaleLinear()
+            .domain([0, 10]) // Assuming the comfort level ranges from 0 to 10
+            .range([scatterHeight, 0]);
 
-    svgScatter.append("g")
-        .call(d3.axisLeft(yScaleScatter))
-        .selectAll(".tick text")
-        .text((d) => airlinesToPlot[d]); // Show airline names on y-axis
+        scatterSvg.append("g")
+            .attr("transform", `translate(0, ${scatterHeight})`)
+            .call(d3.axisBottom(xScatterScale))
+            .selectAll("text")
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
 
-    const circlesScatter = svgScatter.selectAll(".circle")
-        .data(data.filter(d => airlinesToPlot.includes(d["Airline Name"])))
-        .enter()
-        .append("circle")
-        .attr("class", "dot")
-        .attr("cx", (d) => xScaleScatter(parseFloat(d["Seat Comfort"])))
-        .attr("cy", (d) => yScaleScatter(airlinesToPlot.indexOf(d["Airline Name"])))
-        .attr("r", 5)
-        .attr("fill", (d) => colorScale(d["Airline Name"]))
-        .style("opacity", 0.8);
+        scatterSvg.append("g").call(d3.axisLeft(yScatterScale));
 
-    // Add x-axis label
-    svgScatter.append("text")
-        .attr("x", widthScatter / 2)
-        .attr("y", heightScatter + marginScatter.bottom - 10)
-        .style("text-anchor", "middle")
-        .text("Seat Comfort Rating");
+        scatterSvg.selectAll(".dot")
+            .data(airlinesComfortData)
+            .enter()
+            .append("circle")
+            .attr("class", "dot")
+            .attr("cx", (d) => xScatterScale(d.Airline) + xScatterScale.bandwidth() / 2)
+            .attr("cy", (d) => yScatterScale(d.ComfortLevel))
+            .attr("r", 5)
+            .attr("fill", "steelblue");
 
-    // Add y-axis label
-    svgScatter.append("text")
-        .attr("x", -(heightScatter / 2))
-        .attr("y", -marginScatter.left + 15)
-        .attr("transform", "rotate(-90)")
-        .style("text-anchor", "middle")
-        .text("Airlines");
+        scatterSvg.append("text")
+            .attr("x", scatterWidth / 2)
+            .attr("y", scatterHeight + scatterMargin.bottom - 10)
+            .style("text-anchor", "middle")
+            .text("Airline");
 
-    // Add chart description
-    const descriptionScatter = "Comparison of Seat Comfort for Airlines\n" +
-        "This scatter plot shows a comparison of seat comfort ratings for different airlines. " +
-        "The x-axis represents the seat comfort rating, while the y-axis shows the airlines. " +
-        "Each circle represents an airline, and its position on the y-axis corresponds to the airline's rank. " +
-        "Hover over the circles to view the exact seat comfort rating for each airline.";
-    svgScatter.append("text")
-        .attr("x", -marginScatter.left)
-        .attr("y", -marginScatter.top + 15)
-        .style("text-anchor", "start")
-        .style("font-size", "12px")
-        .style("fill", "#555")
-        .text(descriptionScatter);
+        scatterSvg.append("text")
+            .attr("x", -(scatterHeight / 2))
+            .attr("y", -scatterMargin.left + 15)
+            .attr("transform", "rotate(-90)")
+            .style("text-anchor", "middle")
+            .text("Comfort Level");
 
+        // Add legend to slide2
+        const legend2 = scatterContainer.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(640, 30)`);
+
+        const legendItems2 = legend2.selectAll(".legendItem")
+            .data(airlinesToPlot)
+            .enter()
+            .append("g")
+            .attr("class", "legendItem")
+            .attr("transform", (d, i) => `translate(0, ${i * 20})`)
+            .on("mouseenter", function (event, d) {
+                scatterContainer.selectAll(".dot")
+                    .style("opacity", 0.2);
+                scatterContainer.selectAll(`.dot.${d.replace(/\s+/g, '')}`)
+                    .style("opacity", 0.7);
+            })
+            .on("mouseleave", function () {
+                scatterContainer.selectAll(".dot")
+                    .style("opacity", 0.7);
+            });
+
+        legendItems2.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", (d) => colorScale(d));
+
+        legendItems2.append("text")
+            .attr("x", 20)
+            .attr("y", 10)
+            .text((d) => d)
+            .attr("fill", "#333")
+            .style("font-size", "12px");
+
+
+        // Hide the scatter plot initially
+        d3.select("#slide2").style("display", "none");
 
 
     });
