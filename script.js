@@ -266,5 +266,75 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateGraph(yearIndex);
             }
         });
+
+
+
+
+        
+// Create the scatter plot in slide 2
+        const scatterMargin = { top: 40, right: 30, bottom: 50, left: 60 };
+        const scatterWidth = 800 - scatterMargin.left - scatterMargin.right;
+        const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
+
+        const scatterSvg = d3.select("#scatterPlotContainer")
+            .append("svg")
+            .attr("width", scatterWidth + scatterMargin.left + scatterMargin.right)
+            .attr("height", scatterHeight + scatterMargin.top + scatterMargin.bottom)
+            .append("g")
+            .attr("transform", `translate(${scatterMargin.left}, ${scatterMargin.top})`);
+
+        const airlinesComfortData = airlinesToPlot.map((airline) => {
+            const comfortData = data.filter((d) => d["Airline Name"] === airline);
+            return {
+                Airline: airline,
+                ComfortLevel: d3.mean(comfortData, (d) => parseFloat(d["Seat Comfort"])) || 0,
+            };
+        });
+
+        const xScatterScale = d3.scaleBand()
+            .domain(airlinesComfortData.map((d) => d.Airline))
+            .range([0, scatterWidth])
+            .padding(0.2);
+
+        const yScatterScale = d3.scaleLinear()
+            .domain([0, 10]) // Assuming the comfort level ranges from 0 to 10
+            .range([scatterHeight, 0]);
+
+        scatterSvg.append("g")
+            .attr("transform", `translate(0, ${scatterHeight})`)
+            .call(d3.axisBottom(xScatterScale))
+            .selectAll("text")
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
+
+        scatterSvg.append("g").call(d3.axisLeft(yScatterScale));
+
+        scatterSvg.selectAll(".dot")
+            .data(airlinesComfortData)
+            .enter()
+            .append("circle")
+            .attr("class", "dot")
+            .attr("cx", (d) => xScatterScale(d.Airline) + xScatterScale.bandwidth() / 2)
+            .attr("cy", (d) => yScatterScale(d.ComfortLevel))
+            .attr("r", 5)
+            .attr("fill", "steelblue");
+
+        scatterSvg.append("text")
+            .attr("x", scatterWidth / 2)
+            .attr("y", scatterHeight + scatterMargin.bottom - 10)
+            .style("text-anchor", "middle")
+            .text("Airline");
+
+        scatterSvg.append("text")
+            .attr("x", -(scatterHeight / 2))
+            .attr("y", -scatterMargin.left + 15)
+            .attr("transform", "rotate(-90)")
+            .style("text-anchor", "middle")
+            .text("Comfort Level");
+
+        // Hide the scatter plot initially
+        d3.select("#slide2").style("display", "none");
+
+
     });
 });
