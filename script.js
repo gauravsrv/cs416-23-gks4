@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .range(d3.schemeCategory10); // Using D3's built-in color scheme
 
          const legendWidth = 120;   
-        const margin = { top: 40, right: legendWidth, bottom: 50, left: 200 }; // Increased left margin to accommodate the description
+        const margin = { top: 40, right: legendWidth, bottom: 50, left: 80 }; // Increased left margin to accommodate the description
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
         let mouseX = 0;
