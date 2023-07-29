@@ -214,8 +214,8 @@ document.addEventListener("DOMContentLoaded", function () {
         svg.on("click", () => animationInterval.stop());
 
         // Get the mouse position on the SVG container
-        svg.on("mousemove", function () {
-            [mouseX, mouseY] = d3.mouse(this);
+          svg.on("mousemove", function (event) {
+            [mouseX, mouseY] = d3.pointer(event, this);
             updateGraph(yearIndex);
         });
     });
