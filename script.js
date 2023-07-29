@@ -296,8 +296,12 @@ document.addEventListener("DOMContentLoaded", function () {
             .range([0, scatterWidth])
             .padding(0.2);
 
-        const yScatterScale = d3.scaleLinear()
-            .domain([0, 10]) // Assuming the comfort level ranges from 0 to 10
+        // const yScatterScale = d3.scaleLinear()
+        //     .domain([0, 10]) // Assuming the comfort level ranges from 0 to 10
+        //     .range([scatterHeight, 0]);
+        // Use a logarithmic scale for the y-axis
+        const yScatterScale = d3.scaleLog()
+            .domain([0.1, 10]) // Set the domain for the logarithmic scale
             .range([scatterHeight, 0]);
 
         scatterSvg.append("g")
@@ -307,7 +311,10 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
 
-        scatterSvg.append("g").call(d3.axisLeft(yScatterScale));
+        //scatterSvg.append("g").call(d3.axisLeft(yScatterScale));
+        // Use a logarithmic scale for the y-axis
+        scatterSvg.append("g").call(d3.axisLeft(yScatterScale).ticks(5, ".1"));
+
 
         scatterSvg.selectAll(".dot")
             .data(airlinesComfortData)
@@ -345,13 +352,13 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("class", "legendItem")
             .attr("transform", (d, i) => `translate(0, ${i * 20})`)
             .on("mouseenter", function (event, d) {
-                scatterContainer.selectAll(".dot")
+                scatterSvg.selectAll(".dot")
                     .style("opacity", 0.2);
-                scatterContainer.selectAll(`.dot.${d.replace(/\s+/g, '')}`)
+                scatterSvg.selectAll(`.dot.${d.replace(/\s+/g, '')}`)
                     .style("opacity", 0.7);
             })
             .on("mouseleave", function () {
-                scatterContainer.selectAll(".dot")
+                scatterSvg.selectAll(".dot")
                     .style("opacity", 0.7);
             });
 
