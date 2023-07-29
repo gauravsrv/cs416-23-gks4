@@ -1,6 +1,5 @@
 // JavaScript code
 document.addEventListener("DOMContentLoaded", function () {
-    // D3.js code
     const slides = d3.selectAll("#slides > div");
     const pageButtons = d3.selectAll(".pageBtn");
 
@@ -112,10 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        let mouseX = 0;
-        let mouseY = 0;
-
-
         const legend = svg.append("g")
             .attr("class", "legend")
             .attr("transform", `translate(${width - 100}, 20)`);
@@ -145,31 +140,16 @@ document.addEventListener("DOMContentLoaded", function () {
             circle.attr("cx", (d) => xScale(d[yearIndex].Year))
                 .attr("cy", (d) => yScale(d[yearIndex].Rating));
 
-            if (d3.event) {
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", 0)
-                    .transition()
-                    .duration(200)
-                    .style("opacity", 0.9)
-                    .style("left", `${d3.event.pageX}px`)
-                    .style("top", `${d3.event.pageY - 28}px`)
-                    .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
-            } else {
-                tooltip.transition()
-                .duration(200)
-                .style("opacity", 0.9)
+            tooltip.style("opacity", 0.9)
                 .style("left", `${mouseX}px`)
                 .style("top", `${mouseY - 28}px`)
                 .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
-
-            }
 
             path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
         }
 
         let yearIndex = 0;
-         updateGraph(yearIndex, 0, 0); 
+        updateGraph(yearIndex);
 
         const animationInterval = d3.interval(() => {
             yearIndex = (yearIndex + 1) % years.length;
@@ -181,8 +161,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Get the mouse position on the SVG container
         svg.on("mousemove", function () {
-            [mouseX, mouseY] = d3.mouse(this)
-            updateGraph(yearIndex, mouseX, mouseY);
+            const [mouseX, mouseY] = d3.mouse(this);
+            updateGraph(yearIndex);
         });
     });
 });
