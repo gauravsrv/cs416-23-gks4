@@ -316,8 +316,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("class", "dot")
             .attr("cx", (d) => xScatterScale(d.Airline) + xScatterScale.bandwidth() / 2)
             .attr("cy", (d) => yScatterScale(d.ComfortLevel))
-            .attr("r", 5)
-            .attr("fill", "steelblue");
+            .attr("r", 8)
+            .attr("fill", (d) => colorScale(d.Airline))
+            .style("opacity", 0.7);
 
         scatterSvg.append("text")
             .attr("x", scatterWidth / 2)
