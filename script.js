@@ -104,39 +104,14 @@ document.addEventListener("DOMContentLoaded", function () {
             .append("circle")
             .attr("class", "dot")
             .attr("r", 4)
-            .attr("fill", (d, i) => colorScale(airlinesToPlot[i]));
+            .attr("fill", (d, i) => colorScale(airlinesToPlot[i]))
+            .style("opacity", 0); // Hide the circles initially
 
         const tooltip = d3.select("#chartContainer")
             .append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        function updateGraph(yearIndex) {
-            circle.attr("cx", (d) => xScale(d[yearIndex].Year))
-                .attr("cy", (d) => yScale(d[yearIndex].Rating));
-
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", 0)
-                .transition()
-                .duration(200)
-                .style("opacity", 0.9)
-                .style("left", `${d3.event.pageX}px`)
-                .style("top", `${d3.event.pageY - 28}px`)
-                .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
-
-            path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
-        }
-
-        let yearIndex = 0;
-        updateGraph(yearIndex);
-
-        d3.interval(() => {
-            yearIndex = (yearIndex + 1) % years.length;
-            updateGraph(yearIndex);
-        }, 1500); // Change the duration as needed for the animation speed
-
-        // Create a legend
         const legend = svg.append("g")
             .attr("class", "legend")
             .attr("transform", `translate(${width - 100}, 20)`);
@@ -161,5 +136,33 @@ document.addEventListener("DOMContentLoaded", function () {
             .text((d) => d)
             .attr("fill", "#333")
             .style("font-size", "12px");
+
+        function updateGraph(yearIndex) {
+            circle.attr("cx", (d) => xScale(d[yearIndex].Year))
+                .attr("cy", (d) => yScale(d[yearIndex].Rating));
+
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0)
+                .transition()
+                .duration(200)
+                .style("opacity", 0.9)
+                .style("left", `${d3.event.pageX}px`)
+                .style("top", `${d3.event.pageY - 28}px`)
+                .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+
+            path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
+        }
+
+        let yearIndex = 0;
+        updateGraph(yearIndex);
+
+        const animationInterval = d3.interval(() => {
+            yearIndex = (yearIndex + 1) % years.length;
+            updateGraph(yearIndex);
+        }, 1500); // Change the duration as needed for the animation speed
+
+        // Stop the animation when the user clicks on the chart
+        svg.on("click", () => animationInterval.stop());
     });
 });
