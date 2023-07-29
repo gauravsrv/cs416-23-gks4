@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const isActive = d3.select(this).classed("active");
             if (!isActive) {
                 const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
-                updateGraphWithAnimation(filteredData[0]);
+                updateGraphData(filteredData[0]);
             }
         })
         .on("mouseleave", function () {
@@ -196,23 +196,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         function updateGraph(yearIndex) {
-            // circle.attr("cx", (d) => xScale(d[yearIndex].Year))
-            //     .attr("cy", (d) => yScale(d[yearIndex].Rating));
+            circle.attr("cx", (d) => xScale(d[yearIndex].Year))
+                .attr("cy", (d) => yScale(d[yearIndex].Rating));
 
-            // tooltip.style("opacity", 0.9)
-            //     .style("left", `${mouseX}px`)
-            //     .style("top", `${mouseY - 28}px`);
+            tooltip.style("opacity", 0.9)
+                .style("left", `${mouseX}px`)
+                .style("top", `${mouseY - 28}px`);
 
-            // path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
-
-            circle.data(data)
-            .attr("cx", (d) => xScale(d.Year))
-            .attr("cy", (d) => yScale(d.Rating))
-            .style("opacity", 1);
-
-            path.data(data)
-                .attr("d", (d) => line(d));
+            path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
         }
+
+        function updateGraphData(data) {
+                const circles = svg.selectAll(".circle").data(data);
+                circles.transition()
+                    .duration(1500) // The same duration as the animation interval
+                    .attr("cx", (d) => xScale(d.Year))
+                    .attr("cy", (d) => yScale(d.Rating))
+                    .style("opacity", 1);
+
+                const paths = svg.selectAll(".line").data(data);
+                paths.transition()
+                    .duration(1500) // The same duration as the animation interval
+                    .attr("d", (d) => line(d));
+            }
+
 
         let isAnimationStopped = false; // A flag to keep track of whether the animation has stopped or not
 
@@ -232,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
       function stopAnimation() {
         animationInterval.stop();
         isAnimationStopped = true;
-        updateGraph(airlinesData);
+        updateGraphData(airlinesData);
     }
 
         let yearIndex = 0;
