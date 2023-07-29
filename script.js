@@ -216,6 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
           svg.on("mousemove", function (event) {
             [mouseX, mouseY] = d3.pointer(event, this);
             updateGraph(yearIndex);
+            updateGraphWithAnimation(airlinesData);
         });
     });
 });
