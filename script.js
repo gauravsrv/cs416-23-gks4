@@ -112,6 +112,10 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
+        let mouseX = 0;
+        let mouseY = 0;
+
+
         const legend = svg.append("g")
             .attr("class", "legend")
             .attr("transform", `translate(${width - 100}, 20)`);
