@@ -164,7 +164,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             const isActive = d3.select(this).classed("active");
             if (!isActive) {
-                const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
+               // const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
+               const filteredData = airlinesData.map((airlineData) =>
+                    airlineData.filter((d) => d.Airline === d)
+                );
                 updateGraphData(filteredData[0]);
             }
         })
