@@ -114,6 +114,14 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
+        // Add chart description
+        const description = "Top-rated Airlines for selected years (2013-2023)";
+        svg.append("text")
+            .attr("x", -margin.left + 10)
+            .attr("y", -margin.top + 10)
+            .style("text-anchor", "start")
+            .style("font-size", "14px")
+            .text(description);
        
         // Add x-axis label
         svg.append("text")
@@ -130,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("text-anchor", "middle")
             .text("Overall Rating");
 
-            
+
 
         const legend = svg.append("g")
             .attr("class", "legend")
@@ -164,8 +172,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             tooltip.style("opacity", 0.9)
                 .style("left", `${mouseX}px`)
-                .style("top", `${mouseY - 28}px`)
-                .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+                .style("top", `${mouseY - 28}px`);
+                //.html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
 
             path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
         }
@@ -176,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const animationInterval = d3.interval(() => {
             yearIndex = (yearIndex + 1) % years.length;
             updateGraph(yearIndex);
-        }, 500); // Change the duration as needed for the animation speed
+        }, 1500); // Change the duration as needed for the animation speed
 
         // Stop the animation when the user clicks on the chart
         //svg.on("click", () => animationInterval.stop());
