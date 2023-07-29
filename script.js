@@ -202,11 +202,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let yearIndex = 0;
         updateGraph(yearIndex);
-        updateGraphWithAnimation(yearIndex);
+        updateGraphWithAnimation(airlinesData);
 
         const animationInterval = d3.interval(() => {
             yearIndex = (yearIndex + 1) % years.length;
             updateGraph(yearIndex);
+            updateGraphWithAnimation(airlinesData);
         }, 1500); // Change the duration as needed for the animation speed
 
         // Stop the animation when the user clicks on the chart
