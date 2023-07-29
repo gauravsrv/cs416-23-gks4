@@ -27,12 +27,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Load the CSV data and create the chart in slide 1
     d3.csv("Airline_review.csv").then(function (data) {
+        const airlinesToPlot = [
+            "Air India",
+            "US Airways",
+            "United Airlines",
+            "Emirates",
+            "Tigerair",
+            "Thai Airways",
+            "Japan Airlines",
+            "Singapore Airlines",
+            "Qatar Airways",
+            "Oman Air",
+            "British Airways",
+            "Lufthansa",
+            "KLM Royal Dutch Airlines"
+        ];
+
         const years = [2015, 2016, 2017, 2018, 2019];
 
-        const airlines = data.map((d) => d["Airline Name"]).filter((value, index, self) => self.indexOf(value) === index);
-
         const colorScale = d3.scaleOrdinal()
-            .domain(airlines)
+            .domain(airlinesToPlot)
             .range(d3.schemeCategory10); // Using D3's built-in color scheme
 
         const margin = { top: 20, right: 20, bottom: 50, left: 80 };
@@ -60,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         svg.append("g").call(d3.axisLeft(yScale));
 
-        airlines.forEach((airline) => {
+        airlinesToPlot.forEach((airline) => {
             const airlineData = years.map((year) => {
                 const ratingData = data.find((d) => d["Airline Name"] === airline && parseInt(d["Review_year"]) === year);
                 return {
@@ -96,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("transform", `translate(${width - 100}, 20)`);
 
         const legendItems = legend.selectAll(".legendItem")
-            .data(airlines)
+            .data(airlinesToPlot)
             .enter()
             .append("g")
             .attr("class", "legendItem")
