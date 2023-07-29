@@ -136,3 +136,30 @@ document.addEventListener("DOMContentLoaded", function () {
             updateGraph(yearIndex);
         }, 1500); // Change the duration as needed for the animation speed
 
+        // Create a legend
+        const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(${width - 100}, 20)`);
+
+        const legendItems = legend.selectAll(".legendItem")
+            .data(airlinesToPlot)
+            .enter()
+            .append("g")
+            .attr("class", "legendItem")
+            .attr("transform", (d, i) => `translate(0, ${i * 20})`);
+
+        legendItems.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", colorScale);
+
+        legendItems.append("text")
+            .attr("x", 20)
+            .attr("y", 10)
+            .text((d) => d)
+            .attr("fill", "#333")
+            .style("font-size", "12px");
+    });
+});
