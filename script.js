@@ -157,14 +157,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
             } else {
                 tooltip.transition()
-                    .duration(200)
-                    .style("opacity", 0)
-                    .transition()
-                    .duration(200)
-                    .style("opacity", 0.9)
-                    .style("left", `${mouseX}px`)
-                    .style("top", `${mouseY - 28}px`)
-                    .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+                .duration(200)
+                .style("opacity", 0.9)
+                .style("left", `${mouseX}px`)
+                .style("top", `${mouseY - 28}px`)
+                .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+
             }
 
             path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
@@ -183,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Get the mouse position on the SVG container
         svg.on("mousemove", function () {
-            const [mouseX, mouseY] = d3.mouse(this);
+            [mouseX, mouseY] = d3.mouse(this)
             updateGraph(yearIndex, mouseX, mouseY);
         });
     });
