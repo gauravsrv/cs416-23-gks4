@@ -113,22 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
-
-        // Add chart description
-        const description = "Top-rated Airlines for selected years (2013-2023)\n" +
-            "This chart displays the ratings of the top-rated airlines for the selected years, " +
-            "ranging from 2013 to 2023. The y-axis represents the overall rating, " +
-            "while the x-axis represents the years. Each line on the graph represents an airline, " +
-            "and the lines show how their ratings evolved over the years. " +
-            "Hover over the chart to view the ratings for each year.";
-        svg.append("text")
-            .attr("x", -margin.left)
-            .attr("y", -margin.top + 15)
-            .style("text-anchor", "start")
-            .style("font-size", "12px")
-            .style("fill", "#555")
-            .text(description);
-
+ 
        
         // Add x-axis label
         svg.append("text")
@@ -153,11 +138,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const legendItems = legend.selectAll(".legendItem")
-            .data(airlinesToPlot)
-            .enter()
-            .append("g")
-            .attr("class", "legendItem")
-            .attr("transform", (d, i) => `translate(0, ${i * 20})`);
+        .data(airlinesToPlot)
+        .enter()
+        .append("g")
+        .attr("class", "legendItem")
+        .attr("transform", (d, i) => `translate(0, ${i * 20})`)
+        .on("click", function (event, d) {
+            const isActive = d3.select(this).classed("active");
+            d3.selectAll(".legendItem").classed("active", false);
+            d3.select(this).classed("active", !isActive);
+
+            if (!isActive) {
+                const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
+                updateGraphWithAnimation(filteredData);
+            } else {
+                updateGraphWithAnimation(airlinesData);
+            }
+        });
+
+    // ...
+
+    
 
         legendItems.append("rect")
             .attr("x", 0)
@@ -173,6 +174,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("fill", "#333")
             .style("font-size", "12px");
 
+
+
         function updateGraph(yearIndex) {
             circle.attr("cx", (d) => xScale(d[yearIndex].Year))
                 .attr("cy", (d) => yScale(d[yearIndex].Rating));
@@ -184,8 +187,22 @@ document.addEventListener("DOMContentLoaded", function () {
             path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
         }
 
+        function updateGraphWithAnimation(data) {
+        const circles = svg.selectAll(".circle").data(data);
+        circles.transition()
+            .duration(1500) // The same duration as the animation interval
+            .attr("cy", (d) => yScale(d[yearIndex].Rating))
+            .style("opacity", 1);
+
+        const paths = svg.selectAll(".line").data(data);
+        paths.transition()
+            .duration(1500) // The same duration as the animation interval
+            .attr("d", (d) => line(d.slice(0, yearIndex + 1)));
+    }
+
         let yearIndex = 0;
         updateGraph(yearIndex);
+        updateGraphWithAnimation(yearIndex);
 
         const animationInterval = d3.interval(() => {
             yearIndex = (yearIndex + 1) % years.length;
