@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
             "KLM Royal Dutch Airlines"
         ];
 
-        const years = Array.from({ length: 11 }, (_, i) => 2013 + i);
+        const years = Array.from({ length: 11 }, (_, i) => 2013 + i); // From 2013 to 2023
+
         const colorScale = d3.scaleOrdinal()
             .domain(airlinesToPlot)
             .range(d3.schemeCategory10); // Using D3's built-in color scheme
@@ -69,64 +70,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(xScale).ticks(5).tickFormat(d3.format("d")));
+            .call(d3.axisBottom(xScale).ticks(11).tickFormat(d3.format("d")));
 
         svg.append("g").call(d3.axisLeft(yScale));
 
-        airlinesToPlot.forEach((airline) => {
-            const airlineData = years.map((year) => {
+        const line = d3.line()
+            .x((d) => xScale(d.Year))
+            .y((d) => yScale(d.Rating));
+
+        const airlinesData = airlinesToPlot.map((airline) => {
+            return years.map((year) => {
                 const ratingData = data.find((d) => d["Airline Name"] === airline && parseInt(d["Review_year"]) === year);
                 return {
                     Year: year,
                     Rating: ratingData ? parseFloat(ratingData["Overall_Rating"]) : 0,
                 };
             });
-
-            const line = d3.line()
-                .x((d) => xScale(d.Year))
-                .y((d) => yScale(d.Rating));
-
-            svg.append("path")
-                .datum(airlineData)
-                .attr("fill", "none")
-                .attr("stroke", colorScale(airline))
-                .attr("stroke-width", 2)
-                .attr("d", line);
-
-            svg.selectAll(".dot")
-                .data(airlineData)
-                .enter()
-                .append("circle")
-                .attr("cx", (d) => xScale(d.Year))
-                .attr("cy", (d) => yScale(d.Rating))
-                .attr("r", 4)
-                .attr("fill", colorScale(airline));
         });
 
-        // Create a legend
-        const legend = svg.append("g")
-            .attr("class", "legend")
-            .attr("transform", `translate(${width - 100}, 20)`);
-
-        const legendItems = legend.selectAll(".legendItem")
-            .data(airlinesToPlot)
+        const path = svg.selectAll(".path")
+            .data(airlinesData)
             .enter()
-            .append("g")
-            .attr("class", "legendItem")
-            .attr("transform", (d, i) => `translate(0, ${i * 20})`);
+            .append("path")
+            .attr("class", "line")
+            .attr("fill", "none")
+            .attr("stroke", (d, i) => colorScale(airlinesToPlot[i]))
+            .attr("stroke-width", 2)
+            .attr("d", line);
 
-        legendItems.append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", 10)
-            .attr("height", 10)
-            .attr("fill", colorScale);
+        const circle = svg.selectAll(".circle")
+            .data(airlinesData)
+            .enter()
+            .append("circle")
+            .attr("class", "dot")
+            .attr("r", 4)
+            .attr("fill", (d, i) => colorScale(airlinesToPlot[i]));
 
-        legendItems.append("text")
-            .attr("x", 20)
-            .attr("y", 10)
-            .text((d) => d)
-            .attr("fill", "#333")
-            .style("font-size", "12px");
+        const tooltip = d3.select("#chartContainer")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        function updateGraph(yearIndex) {
+            circle.attr("cx", (d) => xScale(d[yearIndex].Year))
+                .attr("cy", (d) => yScale(d[yearIndex].Rating));
+
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0)
+                .transition()
+                .duration(200)
+                .style("opacity", 0.9)
+                .style("left", `${d3.event.pageX}px`)
+                .style("top", `${d3.event.pageY - 28}px`)
+                .html(`<strong>Year:</strong> ${years[yearIndex]}<br><strong>Rating:</strong> ${d3.format(".2f")(airlinesData[0][yearIndex].Rating)}`);
+
+            path.attr("d", (d) => line(d.slice(0, yearIndex + 1)));
+        }
+
+        let yearIndex = 0;
+        updateGraph(yearIndex);
+
+        d3.interval(() => {
+            yearIndex = (yearIndex + 1) % years.length;
+            updateGraph(yearIndex);
+        }, 1500); // Change the duration as needed for the animation speed
     });
 });
