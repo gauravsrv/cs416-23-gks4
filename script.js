@@ -507,49 +507,39 @@ document.addEventListener("DOMContentLoaded", function () {
     d3.select("#slide3").style("display", "none");
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const slides = d3.selectAll("#slides > div");
-    const pageButtons = d3.selectAll(".pageBtn");
-    let currentSlide = 1; // Initialize the current slide index
 
-    function showSlide(slideIndex) {
-        slides.style("display", "none");
-        slides.filter(`#slide${slideIndex}`).style("display", "block");
-    }
 
-    function setSelectedButton(pageIndex) {
-        pageButtons.classed("selected", false);
-        pageButtons.filter(`#page${pageIndex}`).classed("selected", true);
-    }
 
-    function goToNextSlide() {
-        currentSlide = (currentSlide % slides.size()) + 1;
-        showSlide(currentSlide);
-        setSelectedButton(currentSlide);
-    }
+const textMargin = 5;
 
-    const slideshowInterval = setInterval(goToNextSlide, 5000); // Change the interval as needed (in milliseconds)
+// Add annotations for highest and lowest ratings for each airline
+airlinesData.forEach((airlineData) => {
+    const highestRatingData = d3.max(airlineData, (d) => d.Rating);
+    const lowestRatingData = d3.min(airlineData, (d) => d.Rating);
 
-    // Stop the slideshow when the user clicks on a slide or a page button
-    slides.on("click", stopSlideshow);
-    pageButtons.on("click", function () {
-        stopSlideshow();
-        const pageId = d3.select(this).attr("id");
-        const slideIndex = parseInt(pageId.slice(-1));
-        showSlide(slideIndex);
-        setSelectedButton(slideIndex);
-    });
+    // Annotation for highest rating
+    const highestRatingPoint = airlineData.find((d) => d.Rating === highestRatingData);
+    svg.append("text")
+        .attr("class", "annotation")
+        .attr("x", xScale(highestRatingPoint.Year))
+        .attr("y", yScale(highestRatingPoint.Rating) - textMargin)
+        .attr("text-anchor", "middle")
+        .text(`Highest: ${highestRatingData}`)
+        .style("font-size", "12px")
+        .style("fill", colorScale(airlineData[0].Airline));
 
-    function stopSlideshow() {
-        clearInterval(slideshowInterval);
-    }
-
-    // Show the first slide and select the first button by default
-    showSlide(1);
-    setSelectedButton(1);
-
-    // ... (your existing code)
+    // Annotation for lowest rating
+    const lowestRatingPoint = airlineData.find((d) => d.Rating === lowestRatingData);
+    svg.append("text")
+        .attr("class", "annotation")
+        .attr("x", xScale(lowestRatingPoint.Year))
+        .attr("y", yScale(lowestRatingPoint.Rating) + textMargin)
+        .attr("text-anchor", "middle")
+        .text(`Lowest: ${lowestRatingData}`)
+        .style("font-size", "12px")
+        .style("fill", colorScale(airlineData[0].Airline));
 });
+
 
 
     });
