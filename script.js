@@ -487,7 +487,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const legendWidth = 200;
 const legendHeight = airlinesToPlot.length * 20;
 
-const legend = d3.select("#pieChartContainer")
+const legend = d3.select("#slide3")
     .append("svg")
     .attr("width", legendWidth)
     .attr("height", legendHeight)
