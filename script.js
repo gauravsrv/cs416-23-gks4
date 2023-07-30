@@ -417,5 +417,57 @@ document.addEventListener("DOMContentLoaded", function () {
         d3.select("#slide2").style("display", "none");
 
 
+
+         // Create the pie chart in slide 3
+    const pieMargin = { top: 40, right: 30, bottom: 50, left: 60 };
+    const pieWidth = 800 - pieMargin.left - pieMargin.right;
+    const pieHeight = 400 - pieMargin.top - pieMargin.bottom;
+    const radius = Math.min(pieWidth, pieHeight) / 2;
+
+    const pieSvg = d3.select("#pieChartContainer")
+        .append("svg")
+        .attr("width", pieWidth + pieMargin.left + pieMargin.right)
+        .attr("height", pieHeight + pieMargin.top + pieMargin.bottom)
+        .append("g")
+        .attr("transform", `translate(${pieWidth / 2}, ${pieHeight / 2})`);
+
+    const pieColorScale = d3.scaleOrdinal()
+        .domain(airlinesToPlot)
+        .range(d3.schemeCategory10);
+
+    const pieData = airlinesToPlot.map((airline) => {
+        const recommendCount = data.filter((d) => d["Airline Name"] === airline && d["Recommended"] === "yes").length;
+        return { airline: airline, recommendCount: recommendCount };
+    });
+
+    const pie = d3.pie()
+        .value((d) => d.recommendCount);
+
+    const pieArc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+    const pieChart = pieSvg.selectAll(".arc")
+        .data(pie(pieData))
+        .enter()
+        .append("g")
+        .attr("class", "arc");
+
+    pieChart.append("path")
+        .attr("d", pieArc)
+        .attr("fill", (d) => pieColorScale(d.data.airline))
+        .attr("stroke", "#fff")
+        .style("stroke-width", "2px");
+
+    pieChart.append("text")
+        .attr("transform", (d) => `translate(${pieArc.centroid(d)})`)
+        .attr("dy", "0.35em")
+        .style("text-anchor", "middle")
+        .text((d) => `${d.data.airline} (${((d.data.recommendCount / data.length) * 100).toFixed(1)}%)`);
+
+    // Hide the pie chart initially
+    d3.select("#slide3").style("display", "none");
+
+
     });
 });
