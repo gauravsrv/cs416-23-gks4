@@ -514,13 +514,13 @@ const textMargin = 5;
 
 // Add annotations for highest and lowest ratings for each airline
 // ... (your existing code)
-const textMargin = 5;
 
 // Find the overall highest rating(s) among all airlines and years
 const overallHighestRating = d3.max(airlinesData.flatMap((airlineData) => airlineData.map((d) => d.Rating)));
 
 // Find the data point(s) with the overall highest rating(s)
 const overallHighestRatingData = airlinesData.flatMap((airlineData) => airlineData.filter((d) => d.Rating === overallHighestRating));
+
 
 // Add annotations for the overall highest rating(s)
 overallHighestRatingData.forEach((dataPoint) => {
