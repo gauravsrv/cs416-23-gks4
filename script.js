@@ -484,12 +484,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hide the pie chart initially
 
-    const legendWidth = 200;
+   
 const legendHeight = airlinesToPlot.length * 20;
 
 const legend = d3.select("#slide3")
     .append("svg")
-    .attr("width", legendWidth)
+    .attr("width", 200)
     .attr("height", legendHeight)
     .selectAll("g")
     .data(pieData)
