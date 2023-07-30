@@ -1,14 +1,23 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background-color: #f7f7f7;
 }
 
 .container {
-    margin-top: 100px;
+    margin-top: 50px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     color: #333;
+    margin-bottom: 20px;
 }
 
 button {
@@ -18,34 +27,46 @@ button {
     color: #fff;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
-/* Hide slide divs by default */
+.pageBtn {
+    margin: 5px;
+}
+
+.pageBtn.selected {
+    background-color: #333;
+}
+
 #slides > div {
     display: none;
 }
 
-/* Show only the first slide by default */
 #slides > div#slide1 {
     display: block;
-
-/* Style for selected page button */
-.pageBtn.selected {
-    background-color: #333;
-    color: #fff;
 }
 
-/* CSS code */
 .slide-description {
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.6;
     color: #555;
     margin-bottom: 20px;
 }
 
-/* Styling for the legend items */
+#scatterPlotContainer svg {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-/* CSS code for the legend */
+#chartContainer svg {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .legend {
     font-family: Arial, sans-serif;
     font-size: 12px;
@@ -56,45 +77,29 @@ button {
     cursor: pointer;
 }
 
-/* Styling for active (clicked) legend item */
 .legendItem.active {
     font-weight: bold;
 }
 
-/* Styling for legend item when hovered over */
 .legendItem:hover {
     opacity: 0.7;
-}
-
-/* CSS code for the scatter plot */
-#scatterPlotContainer svg {
-    background-color: #f7f7f7;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#scatterPlotContainer .dot {
-    transition: opacity 0.3s ease;
-}
-
-#scatterPlotContainer .dot:hover {
-    opacity: 0.8;
-}
-
-#scatterPlotContainer text {
-    font-size: 12px;
-    fill: #555;
 }
 
 .tooltip {
     position: absolute;
     padding: 8px;
-    color: #333;
-    border: 1px solid #ccc;
+    color: #fff;
     border-radius: 4px;
-    pointer-events: none; /* This ensures that the tooltip doesn't interfere with mouse interactions */
+    pointer-events: none;
     font-size: 12px;
+}
+
+.tooltipScatter {
+    background-color: #333; /* Background color for slide 2 tooltip */
+}
+
+.tooltipPie {
+    background-color: #007BFF; /* Background color for slide 3 tooltip */
 }
 
 /* Additional styling for the tooltip text */
@@ -106,3 +111,22 @@ button {
     font-weight: bold;
 }
 
+/* Center the main text and pagination buttons */
+#mainText, .pagination {
+    text-align: center;
+}
+
+/* Style for slide headers */
+h2 {
+    color: #007BFF;
+}
+
+/* Add some padding to the top of the slides for better spacing */
+#slides > div {
+    padding-top: 20px;
+}
+
+/* Add some margin to the bottom of the slides for better spacing */
+#slides > div {
+    margin-bottom: 40px;
+}
