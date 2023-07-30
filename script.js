@@ -336,7 +336,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0.7)
             .on("mouseenter", function (event, d) {
             // Show tooltip on mouseover
-            const [mouseX, mouseY] = d3.pointer(event, this);
+            const [mouseX, mouseY] = d3.pointer(event, catterSvg.node());
+            const containerRect = scatterSvg.node().getBoundingClientRect();
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0.9);
@@ -344,11 +345,16 @@ document.addEventListener("DOMContentLoaded", function () {
             tooltip.style("opacity", 0.9)
                 .style("left", `${mouseX}px`)
                 .style("top", `${mouseY - 28}px`)
+                // .html(`
+                //     <div><strong>${d.Airline}</strong></div>
+                //     <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
+                //     <div>Comfort Rating: ${d3.format(".2f")(d.ComfortLevel)}</div>
+                // `)
                 .html(`
-                    <div><strong>${d.Airline}</strong></div>
-                    <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
-                    <div>Comfort Rating: ${d3.format(".2f")(d.ComfortLevel)}</div>
-                `)
+                    <div><strong>Airline: ${d.Airline}</strong></div>
+                    <div>Overall Rating: ${d.OverallRating.toFixed(1)}</div>
+                    <div>Comfort Rating: ${d.ComfortLevel.toFixed(1)}</div>
+            `   );
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY - 28) + "px");
             })
