@@ -132,69 +132,69 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-        // const legend = svg.append("g")
-        //     .attr("class", "legend")
-        //     .attr("transform", `translate(640, 30)`); // Move the legend to the right side
+        const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(640, 30)`); // Move the legend to the right side
 
 
-        //  const legendItems = legend.selectAll(".legendItem")
-        // .data(airlinesToPlot)
-        // .enter()
-        // .append("g")
-        // .attr("class", "legendItem")
-        // .attr("transform", (d, i) => `translate(0, ${i * 20})`)
-        // .on("click", function (event, d) {
-        //     if (!isAnimationStopped) {
-        //         stopAnimation();
-        //     }
-        //     const isActive = d3.select(this).classed("active");
-        //     d3.selectAll(".legendItem").classed("active", false);
-        //     d3.select(this).classed("active", !isActive);
+         const legendItems = legend.selectAll(".legendItem")
+        .data(airlinesToPlot)
+        .enter()
+        .append("g")
+        .attr("class", "legendItem")
+        .attr("transform", (d, i) => `translate(0, ${i * 20})`)
+        .on("click", function (event, d) {
+            if (!isAnimationStopped) {
+                stopAnimation();
+            }
+            const isActive = d3.select(this).classed("active");
+            d3.selectAll(".legendItem").classed("active", false);
+            d3.select(this).classed("active", !isActive);
 
-        //     if (!isActive) {
-        //         const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
-        //         updateGraphWithAnimation(filteredData);
-        //     } else {
-        //         updateGraphWithAnimation(airlinesData);
-        //     }
-        // })
-        // .on("mouseenter", function (event, d) {
-        //     if (!isAnimationStopped) {
-        //         stopAnimation();
-        //     }
-        //     const isActive = d3.select(this).classed("active");
-        //     if (!isActive) {
-        //        // const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
-        //        const filteredData = airlinesData.map((airlineData) =>
-        //             airlineData.filter((d) => d.Airline === d)
-        //         );
-        //         updateGraphData(filteredData[0]);
-        //     }
-        // })
-        // .on("mouseleave", function () {
-        //     if (!isAnimationStopped) {
-        //         stopAnimation();
-        //         updateGraphWithAnimation(airlinesData);
-        //     }
-        // });
+            if (!isActive) {
+                const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
+                updateGraphWithAnimation(filteredData);
+            } else {
+                updateGraphWithAnimation(airlinesData);
+            }
+        })
+        .on("mouseenter", function (event, d) {
+            if (!isAnimationStopped) {
+                stopAnimation();
+            }
+            const isActive = d3.select(this).classed("active");
+            if (!isActive) {
+               // const filteredData = airlinesData.filter((airlineData) => airlineData[0].Airline === d);
+               const filteredData = airlinesData.map((airlineData) =>
+                    airlineData.filter((d) => d.Airline === d)
+                );
+                updateGraphData(filteredData[0]);
+            }
+        })
+        .on("mouseleave", function () {
+            if (!isAnimationStopped) {
+                stopAnimation();
+                updateGraphWithAnimation(airlinesData);
+            }
+        });
 
 
 
     
 
-        // legendItems.append("rect")
-        //     .attr("x", 0)
-        //     .attr("y", 0)
-        //     .attr("width", 10)
-        //     .attr("height", 10)
-        //     .attr("fill", colorScale);
+        legendItems.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", colorScale);
 
-        // legendItems.append("text")
-        //     .attr("x", 20)
-        //     .attr("y", 10)
-        //     .text((d) => d)
-        //     .attr("fill", "#333")
-        //     .style("font-size", "12px");
+        legendItems.append("text")
+            .attr("x", 20)
+            .attr("y", 10)
+            .text((d) => d)
+            .attr("fill", "#333")
+            .style("font-size", "12px");
 
 
 
@@ -377,40 +377,40 @@ document.addEventListener("DOMContentLoaded", function () {
             .text("Comfort Level");
 
         // Add legend to slide2
-        // const legend2 = scatterSvg.append("g")
-        //     .attr("class", "legend")
-        //     .attr("transform", `translate(640, 30)`);
+        const legend2 = scatterSvg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(640, 30)`);
 
-        // const legendItems2 = legend2.selectAll(".legendItem")
-        //     .data(airlinesToPlot)
-        //     .enter()
-        //     .append("g")
-        //     .attr("class", "legendItem")
-        //     .attr("transform", (d, i) => `translate(0, ${i * 20})`)
-        //     .on("mouseenter", function (event, d) {
-        //         scatterSvg.selectAll(".dot")
-        //             .style("opacity", 0.2);
-        //         scatterSvg.selectAll(`.dot.${d.replace(/\s+/g, '')}`)
-        //             .style("opacity", 0.7);
-        //     })
-        //     .on("mouseleave", function () {
-        //         scatterSvg.selectAll(".dot")
-        //             .style("opacity", 0.7);
-        //     });
+        const legendItems2 = legend2.selectAll(".legendItem")
+            .data(airlinesToPlot)
+            .enter()
+            .append("g")
+            .attr("class", "legendItem")
+            .attr("transform", (d, i) => `translate(0, ${i * 20})`)
+            .on("mouseenter", function (event, d) {
+                scatterSvg.selectAll(".dot")
+                    .style("opacity", 0.2);
+                scatterSvg.selectAll(`.dot.${d.replace(/\s+/g, '')}`)
+                    .style("opacity", 0.7);
+            })
+            .on("mouseleave", function () {
+                scatterSvg.selectAll(".dot")
+                    .style("opacity", 0.7);
+            });
 
-        // legendItems2.append("rect")
-        //     .attr("x", 0)
-        //     .attr("y", 0)
-        //     .attr("width", 10)
-        //     .attr("height", 10)
-        //     .attr("fill", (d) => colorScale(d));
+        legendItems2.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", (d) => colorScale(d));
 
-        // legendItems2.append("text")
-        //     .attr("x", 20)
-        //     .attr("y", 10)
-        //     .text((d) => d)
-        //     .attr("fill", "#333")
-        //     .style("font-size", "12px");
+        legendItems2.append("text")
+            .attr("x", 20)
+            .attr("y", 10)
+            .text((d) => d)
+            .attr("fill", "#333")
+            .style("font-size", "12px");
 
 
         // Hide the scatter plot initially
@@ -483,81 +483,8 @@ document.addEventListener("DOMContentLoaded", function () {
     //     .text((d) => `${d.data.airline} (${((d.data.recommendCount / data.length) * 100).toFixed(1)}%)`);
 
     // Hide the pie chart initially
-
-
     d3.select("#slide3").style("display", "none");
 
 
-
-    // Legends 
-
-    // Update the legends
-
-function updateLegends(activeAirline) {
-    // Slide 1 legend
-    const legendSlide1 = d3.select("#legendSlide1");
-    const legendItemsSlide1 = legendSlide1.selectAll(".legendItem")
-        .data(airlinesToPlot);
-
-    // Slide 2 legend
-    const legendSlide2 = d3.select("#legendSlide2");
-    const legendItemsSlide2 = legendSlide2.selectAll(".legendItem")
-        .data(airlinesToPlot);
-
-    // Slide 3 legend
-    const legendSlide3 = d3.select("#legendSlide3");
-    const legendItemsSlide3 = legendSlide3.selectAll(".legendItem")
-        .data(airlinesToPlot);
-
-    // Common legend update logic for all slides
-    const legendItems = d3.selectAll(".legendItem");
-
-    legendItems
-        .classed("active", (d) => d === activeAirline) // Highlight active (clicked) legend item
-        .on("click", (event, d) => {
-            // Handle legend item click event
-            const isActive = d3.select(event.currentTarget).classed("active");
-            if (isActive) {
-                // If the same legend item is clicked again, deactivate it
-                d3.select(event.currentTarget).classed("active", false);
-                activeAirline = null;
-            } else {
-                // Otherwise, activate the clicked legend item
-                legendItems.classed("active", (d) => d === event.currentTarget.__data__);
-                activeAirline = event.currentTarget.__data__;
-            }
-
-            // Update the chart based on the activeAirline (selected airline)
-            updateChart(activeAirline);
-            updatePieChart(activeAirline);
-            updateLegends(activeAirline); // Update the legends to show the active airline
-        });
-
-    // Enter new legend items
-    const legendItemsEnter = legendItems
-        .data(airlinesToPlot)
-        .enter()
-        .append("div")
-        .attr("class", "legendItem");
-
-    legendItemsEnter.append("span")
-        .attr("class", "legendColor")
-        .style("background-color", (d) => pieColorScale(d));
-
-    legendItemsEnter.append("span")
-        .text((d) => d);
-}
-
-// Call the updateLegends function initially to set up the legends
-updateLegends(null);
-
-
-
     });
-
-    
-
 });
-
-
-    
