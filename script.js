@@ -453,17 +453,28 @@ document.addEventListener("DOMContentLoaded", function () {
         .append("g")
         .attr("class", "arc");
 
+    const tooltipPie = d3.select("#tooltip");
     pieChart.append("path")
         .attr("d", pieArc)
         .attr("fill", (d) => pieColorScale(d.data.airline))
         .attr("stroke", "#fff")
-        .style("stroke-width", "2px");
+        .style("stroke-width", "2px")
+        .on("mouseover", function (event, d) {
+            const percentage = ((d.data.recommendCount / data.length) * 100).toFixed(1);
+            tooltipPie.transition().duration(200).style("opacity", 0.9);
+            tooltipPie.html(`<strong>${d.data.airline}</strong><br>${percentage}%`)
+                .style("left", `${event.pageX}px`)
+                .style("top", `${event.pageY}px`);
+        })
+        .on("mouseout", function () {
+            tooltip.transition().duration(200).style("opacity", 0);
+        });
 
-    pieChart.append("text")
-        .attr("transform", (d) => `translate(${pieArc.centroid(d)})`)
-        .attr("dy", "0.35em")
-        .style("text-anchor", "middle")
-        .text((d) => `${d.data.airline} (${((d.data.recommendCount / data.length) * 100).toFixed(1)}%)`);
+    // pieChart.append("text")
+    //     .attr("transform", (d) => `translate(${pieArc.centroid(d)})`)
+    //     .attr("dy", "0.35em")
+    //     .style("text-anchor", "middle")
+    //     .text((d) => `${d.data.airline} (${((d.data.recommendCount / data.length) * 100).toFixed(1)}%)`);
 
     // Hide the pie chart initially
     d3.select("#slide3").style("display", "none");
