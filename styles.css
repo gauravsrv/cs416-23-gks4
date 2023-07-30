@@ -46,7 +46,7 @@ button {
 /* Styling for the legend items */
 
 /* CSS code for the legend */
-.legend {
+/*.legend {
     font-family: Arial, sans-serif;
     font-size: 12px;
     fill: #333;
@@ -54,6 +54,34 @@ button {
 
 .legendItem {
     cursor: pointer;
+}
+
+ Styling for active (clicked) legend item 
+.legendItem.active {
+    font-weight: bold;
+}
+
+/* Styling for legend item when hovered over */
+/*.legendItem:hover {
+    opacity: 0.7;
+}*/
+
+/* CSS code for the legends */
+.legends {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Styling for the individual legend items */
+.legendItem {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 /* Styling for active (clicked) legend item */
@@ -65,6 +93,7 @@ button {
 .legendItem:hover {
     opacity: 0.7;
 }
+
 
 /* CSS code for the scatter plot */
 #scatterPlotContainer svg {
