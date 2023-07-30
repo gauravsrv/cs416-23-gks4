@@ -23,6 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Show the first slide and select the first button by default
     showSlide(1);
     setSelectedButton(1);
+    const tooltip1 = d3.select("#chartContainer")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+ 
 
     // Load the CSV data and create the chart in slide 1
     d3.csv("Airline_review.csv").then(function (data) {
@@ -109,11 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("fill", (d, i) => colorScale(airlinesToPlot[i]))
             .style("opacity", 0); // Hide the circles initially
 
-        const tooltip1 = d3.select("#chartContainer")
-            .append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
- 
+        
        
         // Add x-axis label
         svg.append("text")
