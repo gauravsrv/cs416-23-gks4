@@ -273,8 +273,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Create the scatter plot in slide 2
         const scatterMargin = { top: 40, right: 120, bottom: 50, left: 60 };
-        const scatterWidth = 900 - scatterMargin.left - scatterMargin.right;
-        const scatterHeight = 450 - scatterMargin.top - scatterMargin.bottom;
+        const scatterWidth = 800 - scatterMargin.left - scatterMargin.right;
+        const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
 
         const scatterSvg = d3.select("#scatterPlotContainer")
             .append("svg")
