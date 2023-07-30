@@ -466,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .on("mouseover", (event, d) => {
         const [mouseX, mouseY] = d3.pointer(event);
         tooltipPie.transition().duration(200).style("opacity", 0.9);
-        tooltipPie.html(`${d.data.airline}<br>Percentage: ${d.recommendCount}%`)
+        tooltipPie.html(`${d.data.airline}<br>Percentage: ${((d.data.recommendCount / data.length) * 100).toFixed(1)}%`)
             .style("left", `${mouseX}px`)
             .style("top", `${mouseY}px`); // Position the tooltip based on mouse coordinates
     })
