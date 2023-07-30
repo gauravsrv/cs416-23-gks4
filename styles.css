@@ -105,3 +105,21 @@ button {
 .tooltip strong {
     font-weight: bold;
 }
+
+.tooltipPie {
+    position: absolute;
+    padding: 8px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 12px;
+}
+
+.tooltipPie div {
+    margin-bottom: 4px;
+}
+
+.tooltipPie strong {
+    font-weight: bold;
+}
