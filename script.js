@@ -272,8 +272,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Create the scatter plot in slide 2
-        const scatterMargin = { top: 40, right: 30, bottom: 50, left: 60 };
-        const scatterWidth = 800 - scatterMargin.left - scatterMargin.right;
+        const scatterMargin = { top: 40, right: 20, bottom: 50, left: 60 };
+        const scatterWidth = 1000 - scatterMargin.left - scatterMargin.right;
         const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
 
         const scatterSvg = d3.select("#scatterPlotContainer")
@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Add legend to slide2
         const legend2 = scatterSvg.append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(640, 30)`);
+            .attr("transform", `translate(750, 30)`);
 
         const legendItems2 = legend2.selectAll(".legendItem")
             .data(airlinesToPlot)
