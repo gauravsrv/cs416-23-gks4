@@ -318,10 +318,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Use a logarithmic scale for the y-axis
         scatterSvg.append("g").call(d3.axisLeft(yScatterScale).ticks(5, ".1"));
 
-        const tooltip = d3.select("#scatterPlotContainer")
-            .append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
+        const tooltip = scatterSvg.append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
 
         scatterSvg.selectAll(".dot")
@@ -336,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0.7)
             .on("mouseenter", function (event, d) {
             // Show tooltip on mouseover
-            const [mouseX, mouseY] = d3.pointer(event, catterSvg.node());
+            const [mouseX, mouseY] = d3.pointer(event, scatterSvg.node());
             const containerRect = scatterSvg.node().getBoundingClientRect();
             tooltip.transition()
                 .duration(200)
