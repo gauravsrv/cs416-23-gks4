@@ -508,33 +508,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-const textMargin = 5;
+const textMargin = 15;
 
-const highestRatedAirlineData = airlinesData.reduce((prev, current) => {
-        const prevRating = d3.max(prev, (d) => d.Rating);
-        const currentRating = d3.max(current, (d) => d.Rating);
-        return prevRating > currentRating ? prev : current;
-    });
+c// Find the overall highest rating(s) among all airlines and years
+const overallHighestRating = d3.max(airlinesData.flatMap((airlineData) => airlineData.map((d) => d.Rating)));
 
-    const highestRatedAirline = highestRatedAirlineData[0].Airline;
-    const highestRatedAirlineRating = highestRatedAirlineData[0].Rating.toFixed(1);
+// Find the data point(s) with the overall highest rating(s)
+const overallHighestRatingData = airlinesData.flatMap((airlineData) => airlineData.filter((d) => d.Rating === overallHighestRating));
 
-    // Add annotations for the highest-rated airline
-    const annotationX = xScale(highestRatedAirlineData[highestRatedAirlineData.length - 1].Year);
-    const annotationY = yScale(highestRatedAirlineData[highestRatedAirlineData.length - 1].Rating);
-
-    svg.append("circle")
-        .attr("cx", annotationX)
-        .attr("cy", annotationY)
-        .attr("r", 6)
-        .attr("fill", colorScale(highestRatedAirline));
-
-    svg.append("text")
-        .attr("x", annotationX + 10)
-        .attr("y", annotationY)
-        .text(`${highestRatedAirline} (${highestRatedAirlineRating})`)
-        .style("font-size", "12px")
-        .style("fill", colorScale(highestRatedAirline));
+// Add annotations for the overall highest rating(s)
+overallHighestRatingData.forEach((dataPoint) => {
+  svg.append("text")
+    .attr("class", "annotation")
+    .attr("x", xScale(dataPoint.Year))
+    .attr("y", yScale(dataPoint.Rating) - textMargin)
+    .attr("text-anchor", "middle")
+    .text(`Overall Highest: ${overallHighestRating.toFixed(1)}`)
+    .style("font-size", "12px")
+    .style("fill", colorScale(dataPoint.Airline));
+});
 // ... (continue your existing code)
 
 
