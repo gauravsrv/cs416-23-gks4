@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         scatterSvg.append("text")
             .attr("x", scatterWidth / 2)
-            .attr("y", scatterHeight + scatterMargin.bottom - 10)
+            .attr("y", 390)
             .style("text-anchor", "middle")
             .text("Airline");
 
