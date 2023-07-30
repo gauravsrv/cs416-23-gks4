@@ -509,7 +509,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-const airlineAverageRatings = airlinesData.map((airlineData) => {
+const airlinesAverageRatings = airlinesData.map((airlineData) => {
         const totalRating = airlineData.reduce((sum, d) => sum + d.Rating, 0);
         const averageRating = totalRating / airlineData.length;
         return {
@@ -518,7 +518,7 @@ const airlineAverageRatings = airlinesData.map((airlineData) => {
         };
     });
 
-    const highestRatedAirlineData = airlineAverageRatings.reduce((prev, current) => {
+    const highestRatedAirlineData = airlinesAverageRatings.reduce((prev, current) => {
         return prev.AverageRating > current.AverageRating ? prev : current;
     });
 
@@ -526,22 +526,24 @@ const airlineAverageRatings = airlinesData.map((airlineData) => {
     const highestRatedAirlineRating = highestRatedAirlineData.AverageRating.toFixed(1);
 
     // Add annotations for the highest-rated airline
-    const annotationX = xScale(highestRatedAirlineData[highestRatedAirlineData.length - 1].Year);
-    const annotationY = yScale(highestRatedAirlineData[highestRatedAirlineData.length - 1].Rating);
+    const lastYearData = highestRatedAirlineData[highestRatedAirlineData.length - 1];
+    if (lastYearData) {
+        const annotationX = xScale(lastYearData.Year);
+        const annotationY = yScale(lastYearData.Rating);
 
-    svg.append("circle")
-        .attr("cx", annotationX)
-        .attr("cy", annotationY)
-        .attr("r", 6)
-        .attr("fill", colorScale(highestRatedAirline));
+        svg.append("circle")
+            .attr("cx", annotationX)
+            .attr("cy", annotationY)
+            .attr("r", 6)
+            .attr("fill", colorScale(highestRatedAirline));
 
-    svg.append("text")
-        .attr("x", annotationX + 10)
-        .attr("y", annotationY)
-        .text(`${highestRatedAirline} (${highestRatedAirlineRating})`)
-        .style("font-size", "12px")
-        .style("fill", colorScale(highestRatedAirline));
-
+        svg.append("text")
+            .attr("x", annotationX + 10)
+            .attr("y", annotationY)
+            .text(`${highestRatedAirline} (${highestRatedAirlineRating})`)
+            .style("font-size", "12px")
+            .style("fill", colorScale(highestRatedAirline));
+    }
 // ... (continue your existing code)
 
 
@@ -591,8 +593,8 @@ const qatarAirwaysPercentage = qatarAirwaysData ? qatarAirwaysData.recommendCoun
 
 pieSvg.append("text")
   .attr("class", "annotation")
-  .attr("x", 20)
-  .attr("y", 20)
+  .attr("x", 0)
+  .attr("y", 0)
   .attr("text-anchor", "middle")
   .text(`Qatar Airways: ${qatarAirwaysPercentage}%`)
   .style("font-size", "12px")
