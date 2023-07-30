@@ -484,31 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hide the pie chart initially
 
-   
-const legendHeight = airlinesToPlot.length * 20;
-
-const legendPie = d3.select("#slide3")
-    .append("svg")
-    .attr("width", 200)
-    .attr("height", legendHeight)
-    .selectAll("g")
-    .data(pieData)
-    .enter()
-    .append("g")
-    .attr("transform", (d, i) => `translate(0, ${i * 20})`);
-
-legendPie.append("rect")
-    .attr("width", 18)
-    .attr("height", 18)
-    .attr("fill", (d) => pieColorScale(d.airline));
-
-legendPie.append("text")
-    .attr("x", 24)
-    .attr("y", 9)
-    .attr("dy", "0.35em")
-    .text((d) => d.airline);
-
-
+    
     d3.select("#slide3").style("display", "none");
 
 
