@@ -507,5 +507,50 @@ document.addEventListener("DOMContentLoaded", function () {
     d3.select("#slide3").style("display", "none");
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    const slides = d3.selectAll("#slides > div");
+    const pageButtons = d3.selectAll(".pageBtn");
+    let currentSlide = 1; // Initialize the current slide index
+
+    function showSlide(slideIndex) {
+        slides.style("display", "none");
+        slides.filter(`#slide${slideIndex}`).style("display", "block");
+    }
+
+    function setSelectedButton(pageIndex) {
+        pageButtons.classed("selected", false);
+        pageButtons.filter(`#page${pageIndex}`).classed("selected", true);
+    }
+
+    function goToNextSlide() {
+        currentSlide = (currentSlide % slides.size()) + 1;
+        showSlide(currentSlide);
+        setSelectedButton(currentSlide);
+    }
+
+    const slideshowInterval = setInterval(goToNextSlide, 5000); // Change the interval as needed (in milliseconds)
+
+    // Stop the slideshow when the user clicks on a slide or a page button
+    slides.on("click", stopSlideshow);
+    pageButtons.on("click", function () {
+        stopSlideshow();
+        const pageId = d3.select(this).attr("id");
+        const slideIndex = parseInt(pageId.slice(-1));
+        showSlide(slideIndex);
+        setSelectedButton(slideIndex);
+    });
+
+    function stopSlideshow() {
+        clearInterval(slideshowInterval);
+    }
+
+    // Show the first slide and select the first button by default
+    showSlide(1);
+    setSelectedButton(1);
+
+    // ... (your existing code)
+});
+
+
     });
 });
