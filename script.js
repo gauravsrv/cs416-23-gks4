@@ -453,21 +453,25 @@ document.addEventListener("DOMContentLoaded", function () {
         .append("g")
         .attr("class", "arc");
 
-    const tooltipPie = d3.select("#tooltip");
+    const tooltipPie = d3.select("#pieChartContainer")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
     pieChart.append("path")
         .attr("d", pieArc)
         .attr("fill", (d) => pieColorScale(d.data.airline))
         .attr("stroke", "#fff")
         .style("stroke-width", "2px")
-        .on("mouseover", function (event, d) {
-            const percentage = ((d.data.recommendCount / data.length) * 100).toFixed(1);
-            tooltipPie.transition().duration(200).style("opacity", 0.9);
-            tooltipPie.html(`<strong>${d.data.airline}</strong><br>${percentage}%`)
-                .style("left", `${event.pageX}px`)
-                .style("top", `${event.pageY}px`);
-        })
+        .on("mouseover", (event, d) => {
+        const [mouseX, mouseY] = d3.pointer(event);
+        tooltipPie.transition().duration(200).style("opacity", 0.9);
+        tooltipPie.html(`${d.data.airline}<br>Percentage: ${d.data.percentage}%`)
+            .style("left", `${mouseX}px`)
+            .style("top", `${mouseY}px`); // Position the tooltip based on mouse coordinates
+    })
         .on("mouseout", function () {
-            tooltip.transition().duration(200).style("opacity", 0);
+            tooltipPie.transition().duration(500).style("opacity", 0);
         });
 
     // pieChart.append("text")
