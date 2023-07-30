@@ -513,32 +513,28 @@ document.addEventListener("DOMContentLoaded", function () {
 const textMargin = 5;
 
 // Add annotations for highest and lowest ratings for each airline
-airlinesData.forEach((airlineData) => {
-    const highestRatingData = d3.max(airlineData, (d) => d.Rating);
-    const lowestRatingData = d3.min(airlineData, (d) => d.Rating);
+// ... (your existing code)
+const textMargin = 5;
 
-    // Annotation for highest rating
-    const highestRatingPoint = airlineData.find((d) => d.Rating === highestRatingData);
-    svg.append("text")
-        .attr("class", "annotation")
-        .attr("x", xScale(highestRatingPoint.Year))
-        .attr("y", yScale(highestRatingPoint.Rating) - textMargin)
-        .attr("text-anchor", "middle")
-        .text(`Highest: ${highestRatingData}`)
-        .style("font-size", "12px")
-        .style("fill", colorScale(airlineData[0].Airline));
+// Find the overall highest rating(s) among all airlines and years
+const overallHighestRating = d3.max(airlinesData.flatMap((airlineData) => airlineData.map((d) => d.Rating)));
 
-    // Annotation for lowest rating
-    const lowestRatingPoint = airlineData.find((d) => d.Rating === lowestRatingData);
-    svg.append("text")
-        .attr("class", "annotation")
-        .attr("x", xScale(lowestRatingPoint.Year))
-        .attr("y", yScale(lowestRatingPoint.Rating) + textMargin)
-        .attr("text-anchor", "middle")
-        .text(`Lowest: ${lowestRatingData}`)
-        .style("font-size", "12px")
-        .style("fill", colorScale(airlineData[0].Airline));
+// Find the data point(s) with the overall highest rating(s)
+const overallHighestRatingData = airlinesData.flatMap((airlineData) => airlineData.filter((d) => d.Rating === overallHighestRating));
+
+// Add annotations for the overall highest rating(s)
+overallHighestRatingData.forEach((dataPoint) => {
+  svg.append("text")
+    .attr("class", "annotation")
+    .attr("x", xScale(dataPoint.Year))
+    .attr("y", yScale(dataPoint.Rating) - textMargin)
+    .attr("text-anchor", "middle")
+    .text(`Overall Highest: ${overallHighestRating.toFixed(1)}`)
+    .style("font-size", "12px")
+    .style("fill", colorScale(dataPoint.Airline));
 });
+// ... (continue your existing code)
+
 
 
 
@@ -573,18 +569,26 @@ scatterSvg.append("text")
 
 
 // Add annotations for each segment in the pie chart
-const pieArcLabel = d3.arc().innerRadius(radius * 0.7).outerRadius(radius * 0.7);
+// ... (your existing code)
 
-pieSvg.selectAll(".arc-label")
-    .data(pie(pieData))
-    .enter()
-    .append("text")
-    .attr("class", "arc-label")
-    .attr("transform", (d) => `translate(${pieArcLabel.centroid(d)})`)
-    .attr("dy", "0.35em")
-    .style("text-anchor", "middle")
-    .text((d) => `${d.data.airline} (${((d.data.recommendCount / data.length) * 100).toFixed(1)}%)`)
-    .style("font-size", "12px");
+// ... (inside the d3.csv callback function)
+
+// Add the pie chart data and draw the pie chart
+// ... (your existing pie chart code)
+
+// Add an annotation for Qatar Airways
+const qatarAirwaysData = pieData.find((d) => d.airline === "Qatar Airways");
+const qatarAirwaysPercentage = qatarAirwaysData ? qatarAirwaysData.recommendCount.toFixed(1) : 0;
+
+pieSvg.append("text")
+  .attr("class", "annotation")
+  .attr("x", 0)
+  .attr("y", 0)
+  .attr("text-anchor", "middle")
+  .text(`Qatar Airways: ${qatarAirwaysPercentage}%`)
+  .style("font-size", "12px")
+  .style("fill", pieColorScale("Qatar Airways"));
+
 
 
     });
