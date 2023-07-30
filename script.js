@@ -440,9 +440,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return { airline: airline, recommendCount: recommendCount };
     });
 
- const pie = d3.pie()
-    .value((d) => d.percentage)
-    .sort(null);
+    const pie = d3.pie()
+        .value((d) => d.recommendCount);
 
     const pieArc = d3.arc()
         .innerRadius(0)
@@ -467,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .on("mouseover", (event, d) => {
         const [mouseX, mouseY] = d3.pointer(event);
         tooltipPie.transition().duration(200).style("opacity", 0.9);
-        tooltipPie.html(`${d.data.airline}<br>Percentage: ${d.data.percentage}%`)
+        tooltipPie.html(`${d.data.airline}<br>Percentage: ${d.recommendCount}%`)
             .style("left", `${mouseX}px`)
             .style("top", `${mouseY}px`); // Position the tooltip based on mouse coordinates
     })
