@@ -517,16 +517,16 @@ const overallHighestRating = d3.max(airlinesData.flatMap((airlineData) => airlin
 const overallHighestRatingData = airlinesData.flatMap((airlineData) => airlineData.filter((d) => d.Rating === overallHighestRating));
 
 // Add annotations for the overall highest rating(s)
-overallHighestRatingData.forEach((dataPoint) => {
+//overallHighestRatingData.forEach((dataPoint) => {
   svg.append("text")
     .attr("class", "annotation")
-    .attr("x", xScale(dataPoint.Year))
-    .attr("y", yScale(dataPoint.Rating) - textMargin)
+    .attr("x", xScale(overallHighestRatingData[0].Year))
+    .attr("y", yScale(overallHighestRatingData[0].Rating) - textMargin)
     .attr("text-anchor", "middle")
     .text(`Overall Highest: ${overallHighestRating.toFixed(1)}`)
     .style("font-size", "12px")
-    .style("fill", colorScale(dataPoint.Airline));
-});
+    .style("fill", colorScale(overallHighestRatingData[0].Airline));
+//});
 // ... (continue your existing code)
 
 
