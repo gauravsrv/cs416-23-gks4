@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
          const legendWidth = 120;   
         const margin = { top: 40, right: legendWidth, bottom: 50, left: 60 }; // Increased left margin to accommodate the description
-        const width = 900 - margin.left - margin.right;
+        const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
         let mouseX = 0;
         let mouseY = 0;
@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Create the scatter plot in slide 2
         const scatterMargin = { top: 40, right: 120, bottom: 50, left: 60 };
-        const scatterWidth = 900 - scatterMargin.left - scatterMargin.right;
+        const scatterWidth = 800 - scatterMargin.left - scatterMargin.right;
         const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
 
         const scatterSvg = d3.select("#scatterPlotContainer")
@@ -342,7 +342,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const [mouseX, mouseY] = d3.pointer(event);
         const color = scatterColorScale(d["Airline Name"]);
         tooltipScatter.transition().duration(200).style("opacity", 0.9);
-        tooltipScatter.html(`${d["Airline Name"]}<br>Overall Rating: ${d.Overall_Rating}<br>Latest Comfort Rating: ${d.LatestComfort_Rating}`)
+        tooltipScatter.html(`
+            <div><strong>${d.Airline}</strong></div>
+            <div>Overall Rating: ${d.OverallRating.toFixed(1)}</div>
+            <div>Comfort Rating: ${d.ComfortLevel.toFixed(1)}</div>
+            `)
             .style("left", `${mouseX + 10}px`)
             .style("top", `${mouseY - 10}px`)
             .style("background-color", color);
@@ -436,7 +440,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
          // Create the pie chart in slide 3
     const pieMargin = { top: 40, right: 30, bottom: 50, left: 60 };
-    const pieWidth = 900 - pieMargin.left - pieMargin.right;
+    const pieWidth = 800 - pieMargin.left - pieMargin.right;
     const pieHeight = 400 - pieMargin.top - pieMargin.bottom;
     const radius = Math.min(pieWidth, pieHeight) / 2;
 
