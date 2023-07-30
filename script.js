@@ -440,8 +440,9 @@ document.addEventListener("DOMContentLoaded", function () {
         return { airline: airline, recommendCount: recommendCount };
     });
 
-    const pie = d3.pie()
-        .value((d) => d.recommendCount);
+ const pie = d3.pie()
+    .value((d) => d.percentage)
+    .sort(null);
 
     const pieArc = d3.arc()
         .innerRadius(0)
