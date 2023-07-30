@@ -468,7 +468,7 @@ document.addEventListener("DOMContentLoaded", function () {
         tooltipPie.transition().duration(200).style("opacity", 0.9);
         tooltipPie.html(`${d.data.airline}<br>Percentage: ${((d.data.recommendCount / data.length) * 100).toFixed(1)}%`)
             .style("left", `${mouseX}px`)
-            .style("top", `${mouseY}px`);
+            .style("top", `${mouseY}px`)
             .style("background-color", color); // Position the tooltip based on mouse coordinates
     })
         .on("mouseout", function () {
