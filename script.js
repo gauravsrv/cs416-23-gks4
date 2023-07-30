@@ -510,7 +510,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const textMargin = 15;
 
-c// Find the overall highest rating(s) among all airlines and years
+// Find the overall highest rating(s) among all airlines and years
 const overallHighestRating = d3.max(airlinesData.flatMap((airlineData) => airlineData.map((d) => d.Rating)));
 
 // Find the data point(s) with the overall highest rating(s)
