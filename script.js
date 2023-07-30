@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
          const legendWidth = 120;   
         const margin = { top: 40, right: legendWidth, bottom: 50, left: 60 }; // Increased left margin to accommodate the description
-        const width = 800 - margin.left - margin.right;
+        const width = 900 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
         let mouseX = 0;
         let mouseY = 0;
@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Create the scatter plot in slide 2
         const scatterMargin = { top: 40, right: 120, bottom: 50, left: 60 };
-        const scatterWidth = 800 - scatterMargin.left - scatterMargin.right;
+        const scatterWidth = 900 - scatterMargin.left - scatterMargin.right;
         const scatterHeight = 400 - scatterMargin.top - scatterMargin.bottom;
 
         const scatterSvg = d3.select("#scatterPlotContainer")
@@ -293,6 +293,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 ComfortLevel: comfortLevel,
             };
         });
+
+        const scatterColorScale = d3.scaleOrdinal()
+    .domain(airlinesToPlot)
+    .range(d3.schemeCategory10);
 
         const xScatterScale = d3.scaleBand()
             .domain(airlinesComfortData.map((d) => d.Airline))
@@ -432,7 +436,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
          // Create the pie chart in slide 3
     const pieMargin = { top: 40, right: 30, bottom: 50, left: 60 };
-    const pieWidth = 800 - pieMargin.left - pieMargin.right;
+    const pieWidth = 900 - pieMargin.left - pieMargin.right;
     const pieHeight = 400 - pieMargin.top - pieMargin.bottom;
     const radius = Math.min(pieWidth, pieHeight) / 2;
 
