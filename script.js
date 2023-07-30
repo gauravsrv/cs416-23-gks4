@@ -340,7 +340,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0.7)
             .on("mouseover", (event, d) => {
         const [mouseX, mouseY] = d3.pointer(event);
-        const color = scatterColorScale(d.data.airline);
+        const color = scatterColorScale(d.Airline);
         tooltipScatter.transition().duration(200).style("opacity", 0.9);
         tooltipScatter.html(`
             <div><strong>${d.Airline}</strong></div>
