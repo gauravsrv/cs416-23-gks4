@@ -487,7 +487,7 @@ document.addEventListener("DOMContentLoaded", function () {
    
 const legendHeight = airlinesToPlot.length * 20;
 
-const legend = d3.select("#slide3")
+const legendPie = d3.select("#slide3")
     .append("svg")
     .attr("width", 200)
     .attr("height", legendHeight)
@@ -497,12 +497,12 @@ const legend = d3.select("#slide3")
     .append("g")
     .attr("transform", (d, i) => `translate(0, ${i * 20})`);
 
-legend.append("rect")
+legendPie.append("rect")
     .attr("width", 18)
     .attr("height", 18)
     .attr("fill", (d) => pieColorScale(d.airline));
 
-legend.append("text")
+legendPie.append("text")
     .attr("x", 24)
     .attr("y", 9)
     .attr("dy", "0.35em")
