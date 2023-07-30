@@ -508,42 +508,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+const textMargin = 5;
 
-const airlinesAverageRatings = airlinesData.map((airlineData) => {
-        const totalRating = airlineData.reduce((sum, d) => sum + d.Rating, 0);
-        const averageRating = totalRating / airlineData.length;
-        return {
-            Airline: airlineData[0].Airline,
-            AverageRating: averageRating,
-        };
+const highestRatedAirlineData = airlinesData.reduce((prev, current) => {
+        const prevRating = d3.max(prev, (d) => d.Rating);
+        const currentRating = d3.max(current, (d) => d.Rating);
+        return prevRating > currentRating ? prev : current;
     });
 
-    const highestRatedAirlineData = airlinesAverageRatings.reduce((prev, current) => {
-        return prev.AverageRating > current.AverageRating ? prev : current;
-    });
-
-    const highestRatedAirline = highestRatedAirlineData.Airline;
-    const highestRatedAirlineRating = highestRatedAirlineData.AverageRating.toFixed(1);
+    const highestRatedAirline = highestRatedAirlineData[0].Airline;
+    const highestRatedAirlineRating = highestRatedAirlineData[0].Rating.toFixed(1);
 
     // Add annotations for the highest-rated airline
-    const lastYearData = highestRatedAirlineData[highestRatedAirlineData.length - 1];
-    if (lastYearData) {
-        const annotationX = xScale(lastYearData.Year);
-        const annotationY = yScale(lastYearData.Rating);
+    const annotationX = xScale(highestRatedAirlineData[highestRatedAirlineData.length - 1].Year);
+    const annotationY = yScale(highestRatedAirlineData[highestRatedAirlineData.length - 1].Rating);
 
-        svg.append("circle")
-            .attr("cx", annotationX)
-            .attr("cy", annotationY)
-            .attr("r", 6)
-            .attr("fill", colorScale(highestRatedAirline));
+    svg.append("circle")
+        .attr("cx", annotationX)
+        .attr("cy", annotationY)
+        .attr("r", 6)
+        .attr("fill", colorScale(highestRatedAirline));
 
-        svg.append("text")
-            .attr("x", annotationX + 10)
-            .attr("y", annotationY)
-            .text(`${highestRatedAirline} (${highestRatedAirlineRating})`)
-            .style("font-size", "12px")
-            .style("fill", colorScale(highestRatedAirline));
-    }
+    svg.append("text")
+        .attr("x", annotationX + 10)
+        .attr("y", annotationY)
+        .text(`${highestRatedAirline} (${highestRatedAirlineRating})`)
+        .style("font-size", "12px")
+        .style("fill", colorScale(highestRatedAirline));
 // ... (continue your existing code)
 
 
