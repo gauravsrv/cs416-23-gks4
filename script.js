@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("opacity", 0.7)
             .on("mouseenter", function (event, d) {
             // Show tooltip on mouseover
-            const [mouseX, mouseY] = d3.pointer(event, catterSvg.node());
+            const [mouseX, mouseY] = d3.pointer(event, scatterSvg.node());
             const containerRect = scatterSvg.node().getBoundingClientRect();
             tooltip.transition()
                 .duration(200)
