@@ -355,8 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div>Overall Rating: ${d.OverallRating.toFixed(1)}</div>
                     <div>Comfort Rating: ${d.ComfortLevel.toFixed(1)}</div>
             `   );
-                .style("left", (event.pageX) + "px")
-                .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function () {
                 // Hide tooltip on mouseout
