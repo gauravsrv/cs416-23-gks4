@@ -55,6 +55,7 @@ button {
 
 #scatterPlotContainer svg {
     width: 900px;
+    height: 450px;
     background-color: #f7f7f7;
     border: 1px solid #ddd;
     border-radius: 5px;
