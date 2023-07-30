@@ -318,10 +318,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Use a logarithmic scale for the y-axis
         scatterSvg.append("g").call(d3.axisLeft(yScatterScale).ticks(5, ".1"));
 
-        const tooltip = d3.select("#scatterPlotContainer")
-            .append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
+        const tooltipScatter = d3.select("#scatterPlotContainer")
+    .append("div")
+    .attr("class", "tooltip tooltipScatter")
+    .style("opacity", 0);
 
 
         scatterSvg.selectAll(".dot")
@@ -334,34 +334,46 @@ document.addEventListener("DOMContentLoaded", function () {
             .attr("r", 8)
             .attr("fill", (d) => colorScale(d.Airline))
             .style("opacity", 0.7)
-            .on("mouseenter", function (event, d) {
-            // Show tooltip on mouseover
-            const [mouseX, mouseY] = d3.pointer(event, scatterSvg.node());
-            const containerRect = scatterSvg.node().getBoundingClientRect();
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", 0.9);
+            .on("mouseover", (event, d) => {
+        const [mouseX, mouseY] = d3.pointer(event);
+        const color = scatterColorScale(d["Airline Name"]);
+        tooltipScatter.transition().duration(200).style("opacity", 0.9);
+        tooltipScatter.html(`${d["Airline Name"]}<br>Overall Rating: ${d.Overall_Rating}<br>Latest Comfort Rating: ${d.LatestComfort_Rating}`)
+            .style("left", `${mouseX + 10}px`)
+            .style("top", `${mouseY - 10}px`)
+            .style("background-color", color);
+    })
+    .on("mouseout", function () {
+        tooltipScatter.transition().duration(500).style("opacity", 0);
+    });
+            // .on("mouseenter", function (event, d) {
+            // // Show tooltip on mouseover
+            // const [mouseX, mouseY] = d3.pointer(event, scatterSvg.node());
+            // const containerRect = scatterSvg.node().getBoundingClientRect();
+            // tooltip.transition()
+            //     .duration(200)
+            //     .style("opacity", 0.9);
 
-            tooltip.style("opacity", 0.9)
-                .style("left", `${mouseX}px`)
-                .style("top", `${mouseY - 28}px`)
-                // .html(`
-                //     <div><strong>${d.Airline}</strong></div>
-                //     <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
-                //     <div>Comfort Rating: ${d3.format(".2f")(d.ComfortLevel)}</div>
-                // `)
-                .html(`
-                    <div><strong>Airline: ${d.Airline}</strong></div>
-                    <div>Overall Rating: ${d.OverallRating.toFixed(1)}</div>
-                    <div>Comfort Rating: ${d.ComfortLevel.toFixed(1)}</div>
-            `   );
-            })
-            .on("mouseout", function () {
-                // Hide tooltip on mouseout
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
+            // tooltip.style("opacity", 0.9)
+            //     .style("left", `${mouseX}px`)
+            //     .style("top", `${mouseY - 28}px`)
+            //     // .html(`
+            //     //     <div><strong>${d.Airline}</strong></div>
+            //     //     <div>Overall Rating: ${d3.format(".2f")(d.OverallRating)}</div>
+            //     //     <div>Comfort Rating: ${d3.format(".2f")(d.ComfortLevel)}</div>
+            //     // `)
+            //     .html(`
+            //         <div><strong>Airline: ${d.Airline}</strong></div>
+            //         <div>Overall Rating: ${d.OverallRating.toFixed(1)}</div>
+            //         <div>Comfort Rating: ${d.ComfortLevel.toFixed(1)}</div>
+            // `   );
+            // })
+            // .on("mouseout", function () {
+            //     // Hide tooltip on mouseout
+            //     tooltip.transition()
+            //         .duration(500)
+            //         .style("opacity", 0);
+            // });
 
         scatterSvg.append("text")
             .attr("x", scatterWidth / 2)
