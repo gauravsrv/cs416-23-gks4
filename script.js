@@ -484,40 +484,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hide the pie chart initially
 
-
-       // Add legend to slide2
-        const legend3 = scatterSvg.append("g")
-            .attr("class", "legend")
-            .attr("transform", `translate(640, 30)`);
+   
 const legendHeight = airlinesToPlot.length * 20;
 
-const legendPie = legend3.selectAll(".legendItem")
-            .data(airlinesToPlot)
-            .enter()
-            .append("g")
-            .attr("class", "legendItem")
-            .attr("transform", (d, i) => `translate(0, ${i * 20})`);
-            // .on("mouseenter", function (event, d) {
-            //     pieArc.selectAll(".arc")
-            //         .style("opacity", 0.2);
-            //     scatterSvg.selectAll(`.dot.${d.replace(/\s+/g, '')}`)
-            //         .style("opacity", 0.7);
-            // })
-            // .on("mouseleave", function () {
-            //     scatterSvg.selectAll(".dot")
-            //         .style("opacity", 0.7);
-            // });
-
-
-// const legendPie = d3.select("#slide3")
-//     .append("svg")
-//     .attr("width", 200)
-//     .attr("height", legendHeight)
-//     .selectAll("g")
-//     .data(pieData)
-//     .enter()
-//     .append("g")
-//     .attr("transform", (d, i) => `translate(0, ${i * 20})`);
+const legendPie = d3.select("#slide3")
+    .append("svg")
+    .attr("width", 200)
+    .attr("height", legendHeight)
+    .selectAll("g")
+    .data(pieData)
+    .enter()
+    .append("g")
+    .attr("transform", (d, i) => `translate(0, ${i * 20})`);
 
 legendPie.append("rect")
     .attr("width", 18)
