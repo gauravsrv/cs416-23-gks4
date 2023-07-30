@@ -466,10 +466,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const [mouseX, mouseY] = d3.pointer(event);
         const color = pieColorScale(d.data.airline);
         tooltipPie.transition().duration(200).style("opacity", 0.9);
-        tooltipPie.html(`${d.data.airline}<br>Percentage: ${((d.data.recommendCount / data.length) * 100).toFixed(1)}%`)
-            .style("left", `${mouseX}px`)
-            .style("top", `${mouseY}px`)
-            .style("background-color", color); // Position the tooltip based on mouse coordinates
+        tooltipPie.html(`${d.data.airline}<br>Percentage: ${d.data.recommendCount}%`)
+            .style("left", `${mouseX + pieWidth / 2}px`) // Adjust the left position to center the tooltip
+            .style("top", `${mouseY + pieHeight / 2}px`) // Adjust the top position to center the tooltip
+            .style("background-color", color);
     })
         .on("mouseout", function () {
             tooltipPie.transition().duration(500).style("opacity", 0);
