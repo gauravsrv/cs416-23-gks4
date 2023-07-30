@@ -542,5 +542,50 @@ airlinesData.forEach((airlineData) => {
 
 
 
+const scatterTextMargin = 5;
+
+// Add annotations for the airlines with highest and lowest comfort levels
+const highestComfortData = d3.max(airlinesComfortData, (d) => d.ComfortLevel);
+const lowestComfortData = d3.min(airlinesComfortData, (d) => d.ComfortLevel);
+
+const highestComfortAirline = airlinesComfortData.find((d) => d.ComfortLevel === highestComfortData);
+const lowestComfortAirline = airlinesComfortData.find((d) => d.ComfortLevel === lowestComfortData);
+
+// Annotation for highest comfort level
+scatterSvg.append("text")
+    .attr("class", "annotation")
+    .attr("x", xScatterScale(highestComfortAirline.Airline) + xScatterScale.bandwidth() / 2)
+    .attr("y", yScatterScale(highestComfortAirline.ComfortLevel) - scatterTextMargin)
+    .attr("text-anchor", "middle")
+    .text(`Highest: ${highestComfortData.toFixed(1)}`)
+    .style("font-size", "12px")
+    .style("fill", scatterColorScale(highestComfortAirline.Airline));
+
+// Annotation for lowest comfort level
+scatterSvg.append("text")
+    .attr("class", "annotation")
+    .attr("x", xScatterScale(lowestComfortAirline.Airline) + xScatterScale.bandwidth() / 2)
+    .attr("y", yScatterScale(lowestComfortAirline.ComfortLevel) + scatterTextMargin)
+    .attr("text-anchor", "middle")
+    .text(`Lowest: ${lowestComfortData.toFixed(1)}`)
+    .style("font-size", "12px")
+    .style("fill", scatterColorScale(lowestComfortAirline.Airline));
+
+
+// Add annotations for each segment in the pie chart
+const pieArcLabel = d3.arc().innerRadius(radius * 0.7).outerRadius(radius * 0.7);
+
+pieSvg.selectAll(".arc-label")
+    .data(pie(pieData))
+    .enter()
+    .append("text")
+    .attr("class", "arc-label")
+    .attr("transform", (d) => `translate(${pieArcLabel.centroid(d)})`)
+    .attr("dy", "0.35em")
+    .style("text-anchor", "middle")
+    .text((d) => `${d.data.airline} (${((d.data.recommendCount / data.length) * 100).toFixed(1)}%)`)
+    .style("font-size", "12px");
+
+
     });
 });
