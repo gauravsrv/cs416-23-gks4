@@ -453,8 +453,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .append("g")
         .attr("class", "arc");
 
-    const tooltipPie = d3.select("#pieChartContainer")
-    .append("div")
+    const tooltipPie = d3.select("#tooltipPie")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -465,10 +464,12 @@ document.addEventListener("DOMContentLoaded", function () {
         .style("stroke-width", "2px")
         .on("mouseover", (event, d) => {
         const [mouseX, mouseY] = d3.pointer(event);
+        const color = pieColorScale(d.data.airline);
         tooltipPie.transition().duration(200).style("opacity", 0.9);
         tooltipPie.html(`${d.data.airline}<br>Percentage: ${((d.data.recommendCount / data.length) * 100).toFixed(1)}%`)
             .style("left", `${mouseX}px`)
-            .style("top", `${mouseY}px`); // Position the tooltip based on mouse coordinates
+            .style("top", `${mouseY}px`);
+            .style("background-color", color); // Position the tooltip based on mouse coordinates
     })
         .on("mouseout", function () {
             tooltipPie.transition().duration(500).style("opacity", 0);
