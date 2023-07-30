@@ -318,9 +318,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Use a logarithmic scale for the y-axis
         scatterSvg.append("g").call(d3.axisLeft(yScatterScale).ticks(5, ".1"));
 
-        const tooltip = scatterSvg.append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
+        const tooltip = d3.select("#scatterPlotContainer")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
 
         scatterSvg.selectAll(".dot")
